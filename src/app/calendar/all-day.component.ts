@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit,ViewEncapsulation } from '@angular/core';
 import {
   startOfDay,
   endOfDay,
@@ -40,8 +40,17 @@ const colors: any = {
 @Component({
   selector: 'all-day',
   templateUrl: './template.html',
-  providers: [EventsService]
+  providers: [EventsService],
+  encapsulation: ViewEncapsulation.None,
 //   styleUrls: ['./app.component.css']
+styles: [
+  `
+ .my-custom-class a {
+   color: #FF3D7F !important;
+   font-size:15px;
+ }
+`
+]
 })
 export class CalendarDayViewComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;

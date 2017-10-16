@@ -19,8 +19,8 @@ export interface ItemId extends Item { id: string; }
 export class PassengerComponent implements OnInit { 
     private passenegerCollection:AngularFirestoreCollection<Item>;
     private loggedInPassenger:AngularFirestoreCollection<Item>;
-
-    passengers:Observable<ItemId[]>;
+    passengers:Passenger[] = [];
+    // passengers:Observable<ItemId[]>;
     // items:Observable<ItemId[]>;
     passengerToSave:Passenger = new Passenger(0, "passenger to save");
     // item:Observable<ItemId[]>;
@@ -32,22 +32,32 @@ export class PassengerComponent implements OnInit {
     // currentPassengerLoggedIn: Passenger = new Passenger(null,"test");
     
     constructor(afs:AngularFirestore,private passengerService:PassengerService, private EventsService:EventsService) {
-        this.passenegerCollection = afs.collection<Item>('passengers');
-        this.passengers = this.passenegerCollection.snapshotChanges().map(a => {
-      return a.map(b => {
-        const data = b.payload.doc.data() as Item;
-        const id = b.payload.doc.id;
-        console.log(data,id);
-        return { id,...data};
-      })
-    }) ;
+    //     this.passenegerCollection = afs.collection<Item>('passengers');
+    //     this.passengers = this.passenegerCollection.snapshotChanges().map(a => {
+    //   return a.map(b => {
+    //     const data = b.payload.doc.data() as Item;
+    //     const id = b.payload.doc.id;
+    //     console.log(data,id);
+    //     return { id,...data};
+    //   })
+    // }) ;
      }
    
 
     ngOnInit() {
        // this.passengerService.getPassengers().subscribe(data => this.passengers = data);
+       this.passengerService.getPassengersFirebase()
+       .map(events => events)
+       .subscribe(data => {
+         this.passengers = data,
+           console.log("passengers:" + this.passengers)
+       });
      }
       savePassenger(){
+      console.log("passengerToSave: "+this.passengerToSave);
+      this.passenegerCollection.add({name:this.passengerToSave.name});
+    }
+    savePassengerFirebase(){
       console.log("passengerToSave: "+this.passengerToSave);
       this.passenegerCollection.add({name:this.passengerToSave.name});
     }

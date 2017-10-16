@@ -7,13 +7,28 @@ import { Observable } from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import { AngularFirestore, AngularFirestoreCollection,AngularFirestoreDocument } from 'angularfire2/firestore';
 
 @Injectable()
 export class PassengerService {
-
+    private passengerCollection:AngularFirestoreCollection<Passenger>;
+    passengerList:Observable<Passenger[]>;
    
-   constructor(private http: Http){}
-
+   constructor(private http: Http,private afs:AngularFirestore)
+   {
+    this.passengerCollection = afs.collection<Passenger>('passengers');
+    this.passengerList = this.passengerCollection.snapshotChanges().map(a => {
+        return a.map(b => {
+            const data = b.payload.doc.data() as Passenger;
+            const id = b.payload.doc.id;
+            console.log(data, id);
+            return { id, ...data };
+        })
+    })
+   }
+   getPassengersFirebase() {
+       return this.passengerList;
+   }
     getPassengers() {
        return this.http.get(`http://localhost:50751/api/Passenger/`)
         .map((res:Response) => res.json());

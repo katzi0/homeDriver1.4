@@ -1,6 +1,6 @@
 <h1>passenger component </h1>
 <ul>
-<li class="text" *ngFor="let passenger of passengers | async" (click) = "savePassenger(passenger)">
+<li class="text" *ngFor="let passenger of passengers" (click) = "savePassenger(passenger)">
           {{ passenger.name }}
 
   </li>
@@ -12,7 +12,7 @@
 
  
 <h2> passenger after login (will be seperated for own page</h2>
-<input type="text" [(ngModel)]="passengerID">
-<button (click)="getPassenger()" class="btn btn-default">login</button>
+<!-- <input type="text" [(ngModel)]="passengerID"> -->
+<!-- <button (click)="getPassenger()" class="btn btn-default">login</button> -->
 <label>name:{{currentPassengerLoggedIn.name}}</label>
-<button (click)= "getPassengerEvents()">get passenger events</button> 
+<!-- <button (click)= "getPassengerEvents()">get passenger events</button>  -->

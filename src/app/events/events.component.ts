@@ -5,7 +5,7 @@ import {
   CalendarEventAction,
 } from 'angular-calendar';
 
-import { AngularFirestore,AngularFirestoreCollection  } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
 import {
@@ -48,36 +48,36 @@ const colors: any = {
 };
 
 @Component({
-    // moduleId: module.id,
-    selector: 'events',
-    templateUrl: 'events.component.html',
-    providers: [EventsService,PassengerService,driverService]
+  // moduleId: module.id,
+  selector: 'events',
+  templateUrl: 'events.component.html',
+  providers: [EventsService, PassengerService, driverService]
 })
 
 export class EventsComponent implements OnInit {
-    //@Input() calendarEvent : CalendarEvent;
-    editedCalendarEvent: CalendarEvent = {
-      id:null,
-      title: 'New edited event',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.red,
-      draggable: true,
-      // passengers:[],
-      // driver: null,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      passengers:null,
-      driver:null,
-      isActive:true
+  //@Input() calendarEvent : CalendarEvent;
+  editedCalendarEvent: CalendarEvent = {
+    id: null,
+    title: 'New edited event',
+    start: startOfDay(new Date()),
+    end: endOfDay(new Date()),
+    color: colors.red,
+    draggable: true,
+    // passengers:[],
+    // driver: null,
+    resizable: {
+      beforeStart: true,
+      afterEnd: true
+    },
+    passengers: null,
+    driver: null,
+    isActive: true
   }
-/*autocomplete */
-protected searchStr: string;
-protected searchStrDriver: string;
+  /*autocomplete */
+  protected searchStr: string;
+  protected searchStrDriver: string;
   protected captain: string;
-  protected driver: string;
+  driver: string;
   protected dataService: CompleterData;
   // protected searchData = [
   //   { color: 'red', value: '#f00' },
@@ -88,112 +88,115 @@ protected searchStrDriver: string;
   //   { color: 'yellow', value: '#ff0' },
   //   { color: 'black', value: '#000' }
   // ];
-  
-   protected passengersList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett' ];
-   protected driversList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett' ];
-   private eventsCollection:AngularFirestoreCollection<CalendarEvent>;
-   eventsList:Observable<CalendarEvent[]>;
+
+  protected passengersList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
+  protected driversList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
+  private eventsCollection: AngularFirestoreCollection<CalendarEvent>;
+  eventsList: Observable<CalendarEvent[]>;
   //  lastEventID:string;
 
-    onEdit: boolean = false;
-    events: CalendarEvent[] = [];
-    passengers:Passenger[] = [];
-    drivers: driver[] = [];
-    selectedPassengersMap: {} = {};
-    selectedPassengers : Passenger[] = [];
-    selectedDriversMap: {} = {};
-    selectedDrivers : Passenger[] = [];
-    
-    // selectedPassengerName : string;
+  onEdit: boolean = false;
+  events: CalendarEvent[] = [];
+  passengers: Passenger[] = [];
+  drivers: driver[] = [];
+  selectedPassengersMap: {} = {};
+  selectedPassengers: Passenger[] = [];
+  selectedDriversMap: {} = {};
+  selectedDrivers: Passenger[] = [];
 
-    constructor(private eventsService: EventsService, 
-                private PassengerService:PassengerService, 
-                private driverService:driverService, 
-                private completerService: CompleterService,
-                afs:AngularFirestore) {
-                this.eventsCollection = afs.collection<CalendarEvent>('calendarEvent');
-      // this.dataService = completerService.local(this.searchData, 'color', 'color');
-     }
+  // selectedPassengerName : string;
+
+  constructor(private eventsService: EventsService,
+    private PassengerService: PassengerService,
+    private driverService: driverService,
+    private completerService: CompleterService,
+    afs: AngularFirestore) {
+    this.eventsCollection = afs.collection<CalendarEvent>('calendarEvent');
+    // this.dataService = completerService.local(this.searchData, 'color', 'color');
+  }
 
   ngOnInit() {
-        // this.eventsService.getEvents().subscribe(data => {console.log(data)});
-        
-        //  this.PassengerService.getPassengers().subscribe( PassengersData =>{ this.passengers= PassengersData, console.log("passengers:" + this.passengers)
-        //  this.passengersList = PassengersData.map(function(passenger){return passenger.name})
-        // ,this.initSelectedList(this.passengers),console.log("passenger2s:" + this.passengersList)});
-        
-        // this.driverService.getdrivers().subscribe( DriversData => { this.drivers = DriversData,
-        // this.driversList = DriversData.map(function(driver){return driver.name})
-        // ,this.initSelectedList(this.drivers),console.log("drivers:" + this.driversList)});
-        //this.eventsList = this.eventsService.getEventsFireBase();
-        this.eventsService.getEventsFireBase()
-                          .map(events => events
-                          .filter(event => event.isActive))
-                          .subscribe(data=>{
-                            this.events = data,
-                            console.log("events:"+this.events)
-                           });
+    // this.eventsService.getEvents().subscribe(data => {console.log(data)});
 
+    //  this.PassengerService.getPassengers().subscribe( PassengersData =>{ this.passengers= PassengersData, console.log("passengers:" + this.passengers)
+    //  this.passengersList = PassengersData.map(function(passenger){return passenger.name})
+    // ,this.initSelectedList(this.passengers),console.log("passenger2s:" + this.passengersList)});
 
-     }
-  
-     addEvent(): void {
+    // this.driverService.getdrivers().subscribe( DriversData => { this.drivers = DriversData,
+    // this.driversList = DriversData.map(function(driver){return driver.name})
+    // ,this.initSelectedList(this.drivers),console.log("drivers:" + this.driversList)});
+    //this.eventsList = this.eventsService.getEventsFireBase();
+    this.eventsService.getEventsFireBase()
+      .map(events => events
+        .filter(event => event.isActive))
+      .subscribe(data => {
+        this.events = data,
+          console.log("events:" + this.events)
+      });
+      this.PassengerService.getPassengersFirebase()
+      .subscribe(data => { this.passengers = data, console.log("passengers:" + this.passengers)});
+    
+    
+    }
+
+  addEvent(): void {
     this.events.push({
-      id:null,
+      id: null,
       title: 'New event',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
       color: {
         // key: null,
-              primary: '#ad2121',
-              secondary: '#FAE3E3'},
+        primary: '#ad2121',
+        secondary: '#FAE3E3'
+      },
       draggable: true,
       resizable: {
         beforeStart: true,
         afterEnd: true
       },
-      passengers:null,
-      driver:null,
-      isActive:true
+      passengers: null,
+      driver: null,
+      isActive: true
     });
 
   }
-  deleteEvent(calendarEvent:CalendarEvent){
+  deleteEvent(calendarEvent: CalendarEvent) {
     this.eventsService.deleteEvent(calendarEvent);
   }
-  saveEventFireBase(){
+  saveEventFireBase() {
     this.eventsCollection.add(this.editedCalendarEvent);
   }
-  updateEventFireBase(calendarEvent:CalendarEvent){
+  updateEventFireBase(calendarEvent: CalendarEvent) {
     this.eventsService.updateEvent(calendarEvent);
   }
-  deActivateEvent(calendarEvent:CalendarEvent){
+  deActivateEvent(calendarEvent: CalendarEvent) {
     this.eventsService.deActivateEvent(calendarEvent);
   }
   saveEvent(): void {
     this.eventsService.saveEvents(this.editedCalendarEvent).subscribe(data => {
-      this.events.push(data),console.log(data)
+      this.events.push(data), console.log(data)
     });
   }
-    initSelectedList(list):void {
-      for(var i=0; i < list.length; i++){
+  initSelectedList(list): void {
+    for (var i = 0; i < list.length; i++) {
       //  this.selectedPassengers = ({[this.passengers[i].name] : true}); 
-        this.selectedPassengersMap[this.passengers[i].name] = false; 
-      }
+      this.selectedPassengersMap[this.passengers[i].name] = false;
     }
-    updateCheckedOptions(passenger, event) {
-      this.selectedPassengersMap[passenger.name] = event.target.checked;
+  }
+  updateCheckedOptions(passenger, event) {
+    this.selectedPassengersMap[passenger.name] = event.target.checked;
+  }
+  updateSelectedPassengers() {
+    for (var x in this.selectedPassengersMap) {
+      if (this.selectedPassengersMap[x])
+        this.selectedPassengers.push(this.passengers[x]);
     }
-    updateSelectedPassengers(){
-      for(var x in this.selectedPassengersMap){
-          if(this.selectedPassengersMap[x])
-            this.selectedPassengers.push(this.passengers[x]);
-      }
-    }
-    checkForPassengers(){
+  }
+  checkForPassengers() {
 
-    }
-  
+  }
+
   // autocomplete select event -  passengers
   // onSelect(item: CompleterItem){
   //  if(item) {
@@ -213,9 +216,9 @@ protected searchStrDriver: string;
   // }
 
   //remove selected passenger from event
-  removePassengerFromEvent(passenger){
-    this.editedCalendarEvent.passengers.splice(passenger,1);
-    this.selectedPassengers.splice(passenger,1);
+  removePassengerFromEvent(passenger) {
+    this.editedCalendarEvent.passengers.splice(passenger, 1);
+    this.selectedPassengers.splice(passenger, 1);
     this.passengersList.push(passenger);
   }
 }
