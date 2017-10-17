@@ -16,6 +16,8 @@ import {
   CalendarEventAction,
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
+import { tripEvent } from '../calendar/tripEvent.interface';
+
 
 import { EventsService } from '../events/events.service';
 import { Observable } from 'rxjs/Observable';
@@ -80,8 +82,8 @@ export class CalendarDayViewComponent implements OnInit {
   refresh: Subject<any> = new Subject();
 
   titles: string[] = ["1","2","3"];
- events: CalendarEvent[] = [];
- eventsFireBase: Observable<CalendarEvent[]>;
+ events: tripEvent[] = [];
+ eventsFireBase: Observable<tripEvent[]>;
 
   activeDayIsOpen: boolean = true;
 

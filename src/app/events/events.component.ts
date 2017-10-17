@@ -4,6 +4,7 @@ import {
   CalendarEvent,
   CalendarEventAction,
 } from 'angular-calendar';
+import { tripEvent } from '../calendar/tripEvent.interface';
 
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
@@ -56,7 +57,7 @@ const colors: any = {
 
 export class EventsComponent implements OnInit {
   //@Input() calendarEvent : CalendarEvent;
-  editedCalendarEvent: CalendarEvent = {
+  editedCalendarEvent: tripEvent = {
     id: null,
     title: 'New edited event',
     start: startOfDay(new Date()),
@@ -91,12 +92,12 @@ export class EventsComponent implements OnInit {
 
   protected passengersList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
   protected driversList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
-  private eventsCollection: AngularFirestoreCollection<CalendarEvent>;
-  eventsList: Observable<CalendarEvent[]>;
+  private eventsCollection: AngularFirestoreCollection<tripEvent>;
+  eventsList: Observable<tripEvent[]>;
   //  lastEventID:string;
 
   onEdit: boolean = false;
-  events: CalendarEvent[] = [];
+  events: tripEvent[] = [];
   passengers: Passenger[] = [];
   drivers: driver[] = [];
   selectedPassengersMap: {} = {};
@@ -111,7 +112,7 @@ export class EventsComponent implements OnInit {
     private driverService: driverService,
     private completerService: CompleterService,
     afs: AngularFirestore) {
-    this.eventsCollection = afs.collection<CalendarEvent>('calendarEvent');
+    this.eventsCollection = afs.collection<tripEvent>('calendarEvent');
     // this.dataService = completerService.local(this.searchData, 'color', 'color');
   }
 
@@ -161,17 +162,17 @@ export class EventsComponent implements OnInit {
     });
 
   }
-  deleteEvent(calendarEvent: CalendarEvent) {
-    this.eventsService.deleteEvent(calendarEvent);
+  deleteEvent(tripEvent: tripEvent) {
+    this.eventsService.deleteEvent(tripEvent);
   }
   saveEventFireBase() {
     this.eventsCollection.add(this.editedCalendarEvent);
   }
-  updateEventFireBase(calendarEvent: CalendarEvent) {
-    this.eventsService.updateEvent(calendarEvent);
+  updateEventFireBase(tripEvent: tripEvent) {
+    this.eventsService.updateEvent(tripEvent);
   }
-  deActivateEvent(calendarEvent: CalendarEvent) {
-    this.eventsService.deActivateEvent(calendarEvent);
+  deActivateEvent(tripEvent: tripEvent) {
+    this.eventsService.deActivateEvent(tripEvent);
   }
   saveEvent(): void {
     this.eventsService.saveEvents(this.editedCalendarEvent).subscribe(data => {

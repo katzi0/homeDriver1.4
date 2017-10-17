@@ -17,6 +17,7 @@ import {
   CalendarEventAction,
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
+import { tripEvent } from '../calendar/tripEvent.interface';
 
 const colors: any = {
   red: {
@@ -69,7 +70,7 @@ view: string = 'month';
   refresh: Subject<any> = new Subject();
 
   titles: string[] = ["1","2","3"];
-  events: CalendarEvent[] = [{
+  events: tripEvent[] = [{
     id:null,
     start: subDays(startOfDay(new Date()), 1),
     end: addDays(new Date(), 1),
@@ -115,7 +116,7 @@ view: string = 'month';
     isActive:true
   }];
 
-singleEvent: CalendarEvent = {
+singleEvent: tripEvent = {
   id:null, 
   start: subDays(startOfDay(new Date()), 1),
    end: addDays(new Date(), 1),

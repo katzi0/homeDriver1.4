@@ -10,6 +10,8 @@ import {
     CalendarEvent,
     CalendarEventAction,
 } from 'angular-calendar';
+import { tripEvent } from '../calendar/tripEvent.interface';
+
 import {
     startOfDay,
     endOfDay,
@@ -29,17 +31,17 @@ import { AngularFirestore, AngularFirestoreCollection,AngularFirestoreDocument }
 @Injectable()
 export class EventsService {
 
-    private eventsCollection: AngularFirestoreCollection<CalendarEvent>;
-    eventsList: Observable<CalendarEvent[]>;
-    itemToRemoveDoc:AngularFirestoreDocument<CalendarEvent>;
-    itemToRemove:Observable<CalendarEvent>;
+    private eventsCollection: AngularFirestoreCollection<tripEvent>;
+    eventsList: Observable<tripEvent[]>;
+    itemToRemoveDoc:AngularFirestoreDocument<tripEvent>;
+    itemToRemove:Observable<tripEvent>;
     $itemToDeleteID:string;
 
     constructor(private http: Http, private afs: AngularFirestore) {
-        this.eventsCollection = afs.collection<CalendarEvent>('calendarEvent');
+        this.eventsCollection = afs.collection<tripEvent>('calendarEvent');
         this.eventsList = this.eventsCollection.snapshotChanges().map(a => {
             return a.map(b => {
-                const data = b.payload.doc.data() as CalendarEvent;
+                const data = b.payload.doc.data() as tripEvent;
                 const id = b.payload.doc.id;
                 console.log(data, id);
                 return { id, ...data };
@@ -50,14 +52,14 @@ export class EventsService {
         //  this.itemToRemove = this.itemToRemoveDoc."calenderEvent/2kDMIYqJNUjzsJRAgHJW"
         
     }
-    deleteEvent(calendarEvent:CalendarEvent){
+    deleteEvent(calendarEvent:tripEvent){
         this.$itemToDeleteID = calendarEvent.id;
         // this.itemToRemoveDoc = this.afs.doc<CalendarEvent>('calenderEvent/' + this.$itemToDeleteID);
         // this.itemToRemove = this.itemToRemoveDoc.valueChanges();
         console.log("itemToRemove:"+this.itemToRemove);
         this.itemToRemoveDoc.delete();
     }
-    deActivateEvent(calendarEvent:CalendarEvent){
+    deActivateEvent(calendarEvent:tripEvent){
         calendarEvent.isActive = false;
          this.eventsCollection.doc(calendarEvent.id).update(calendarEvent);
     }
@@ -68,7 +70,7 @@ export class EventsService {
     getEventsFireBase(){
         return this.eventsList;
     }
-    updateEvent(calendarEvent:CalendarEvent){
+    updateEvent(calendarEvent:tripEvent){
         console.log("updated eventid:"+calendarEvent.id);
         this.eventsCollection.doc(calendarEvent.id).update(calendarEvent);
     }
@@ -78,7 +80,7 @@ export class EventsService {
         var arr: Array<Passenger> = [passenger1, passenger1];
 
         // var arr: Array<{id: number, name: string}> = [{id:null,name:"passenger1"},{id:null,name:"passenger1"}];
-        var tripToSave: CalendarEvent =
+        var tripToSave: tripEvent =
             {
                  id: null,
                 // tripDriver: new driver(null,"testdriver"),
@@ -137,7 +139,6 @@ export class EventsService {
         let options = new RequestOptions({ headers: headers });
         return this.http.get('http://localhost:50751/api/CalendarEvent/' + passengerID).map((res: Response) => res.json());//${this.heroesUrl}/${id}`;
         //return this.http.get(url).map((res:Response) => res.json());//${this.heroesUrl}/${id}`;
-
     }
 
 }
