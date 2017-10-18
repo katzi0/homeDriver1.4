@@ -14,13 +14,18 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventAction,
-  CalendarEventTimesChangedEvent
+  CalendarEventTimesChangedEvent,
+  CalendarEventTitleFormatter,
+  CalendarDateFormatter
 } from 'angular-calendar';
 import { tripEvent } from '../calendar/tripEvent.interface';
+import { CustomDateFormatter } from './custom-data-formatter';
 
 
 import { EventsService } from '../events/events.service';
 import { Observable } from 'rxjs/Observable';
+// import { CalendarEventTitleFormatter } from 'app/providers/calendarEventTitleFormatter.provider';
+import { CustomEventTitleFormatter } from 'app/calendar/CustomEventTitleFormatter';
 
 
 const colors: any = {
@@ -41,24 +46,35 @@ const colors: any = {
 
 @Component({
   selector: 'all-day',
+ // changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './template.html',
-  providers: [EventsService],
-  encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: CalendarEventTitleFormatter,
+      useClass: CustomEventTitleFormatter
+    },
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomDateFormatter
+    },
+    EventsService
+  ],
+//  encapsulation: ViewEncapsulation.None,
 //   styleUrls: ['./app.component.css']
-styles: [
-  `
- .my-custom-class a {
-   color: #FF3D7F !important;
-   font-size:15px;
- }
-`
-]
+// styles: [
+//   `
+//  .my-custom-class a {
+//    color: #FF3D7F !important;
+//    font-size:15px;
+//  }
+// `
+// ]
 })
 export class CalendarDayViewComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   view: string = 'month';
-
+  locale: string = 'he';
   viewDate: Date = new Date();
 
   modalData: {
