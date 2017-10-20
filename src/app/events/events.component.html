@@ -105,7 +105,7 @@
     <span>{{passenger.name}}</span>
   </div>
 </div>
-<button type="button" (click)="updateSelectedPassengers()">save passengers</button>
+<button type="button" (click)="updateSelectedPassengers()">שמור נוסעים</button>
 <input type="text" (change)="checkForPassengers()">
 
 
@@ -114,8 +114,7 @@
 
 <p>selected passenger</p>
 <div *ngFor="let passenger of selectedPassengers">
-  <span> {{passenger.name}} {{passenger.id}}
-  </span>
+  <span> {{passenger.name}}</span>
   <span (click)="removePassengerFromEvent(passenger)">remove</span>
 </div>
 

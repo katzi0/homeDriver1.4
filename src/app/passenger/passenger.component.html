@@ -6,13 +6,20 @@
   </li>
 </ul>
 <!-- <div *ngFor="let passenger of passengers">{{passenger.name}}</div>    -->
+<h3>הוספת נוסע חדש</h3>
+
+<label>שם:</label><input type="text" [(ngModel)]="passengerToSave.name">
+<br>
+<label>יעד:</label>
+<input type="text" [(ngModel)]="passengerToSave.destination">
+
 <h3>{{passengerToSave.name}}</h3>
-<input type="text" [(ngModel)]="passengerToSave.name">
-<button (click)="savePassenger()" class="btn btn-primary">save</button>
+<h3>{{passengerToSave.destination}}</h3>
+<button (click)="savePassengerFirebase()" class="btn btn-primary">save</button>
 
  
-<h2> passenger after login (will be seperated for own page</h2>
+<!-- <h2> passenger after login (will be seperated for own page</h2> -->
 <!-- <input type="text" [(ngModel)]="passengerID"> -->
 <!-- <button (click)="getPassenger()" class="btn btn-default">login</button> -->
-<label>name:{{currentPassengerLoggedIn.name}}</label>
+<!-- <label>name:{{currentPassengerLoggedIn.name}}</label> -->
 <!-- <button (click)= "getPassengerEvents()">get passenger events</button>  -->

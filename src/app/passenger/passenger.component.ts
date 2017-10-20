@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges } from '@angular/core';// SimpleChanges, Input
- import { Passenger} from './passenger';
+import { Passenger} from './passenger';
 import { PassengerService } from './passenger.service';
 import { EventsService } from '../events/events.service';
 
@@ -22,9 +22,9 @@ export class PassengerComponent implements OnInit {
     passengers:Passenger[] = [];
     // passengers:Observable<ItemId[]>;
     // items:Observable<ItemId[]>;
-    passengerToSave:Passenger = new Passenger(0, "passenger to save");
+    passengerToSave:Passenger = {id:"0", name:"passenger to save", destination:"none"};//new Passenger(id:"0", name:"passenger to save", destination:"none");
     // item:Observable<ItemId[]>;
-    currentPassengerLoggedIn: Passenger = new Passenger(0, "passenger to save");
+    currentPassengerLoggedIn: Passenger = {id:"0", name:"passenger to save", destination:"none"};//new Passenger("0", "passenger to save","none");
 
     
     // passengerToSave: Passenger = new Passenger(null, "passenger to save");
@@ -59,7 +59,8 @@ export class PassengerComponent implements OnInit {
     }
     savePassengerFirebase(){
       console.log("passengerToSave: "+this.passengerToSave);
-      this.passenegerCollection.add({name:this.passengerToSave.name});
+      this.passengerService.savePassengerFirebase(this.passengerToSave);
+      // this.passenegerCollection.add({name:this.passengerToSave.name});
     }
     // getPassenger(){
     //   this.passenegerCollection.

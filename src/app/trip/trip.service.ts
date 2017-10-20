@@ -20,7 +20,7 @@ export class TripService {
             .map((res:Response) => res.json());
      }
      saveTrip(){
-        var passenger1: Passenger = new Passenger(1,"test");
+        var passenger1: Passenger = ({id:"1",name:"test",destination:"none"});
         var arr: Array<Passenger> = [passenger1,passenger1];
 
         // var arr: Array<{id: number, name: string}> = [{id:null,name:"passenger1"},{id:null,name:"passenger1"}];

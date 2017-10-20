@@ -9,6 +9,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { AngularFirestore, AngularFirestoreCollection,AngularFirestoreDocument } from 'angularfire2/firestore';
 
+import { UUID } from 'angular2-uuid';
+
+
 @Injectable()
 export class PassengerService {
     private passengerCollection:AngularFirestoreCollection<Passenger>;
@@ -29,25 +32,30 @@ export class PassengerService {
    getPassengersFirebase() {
        return this.passengerList;
    }
-    getPassengers() {
-       return this.http.get(`http://localhost:50751/api/Passenger/`)
-        .map((res:Response) => res.json());
-    }
-    getSepcificPassenger(passengerID) {
-       return this.http.get(`http://localhost:50751/api/Passenger/` + passengerID)
-        .map((res:Response) => res.json());
-    }
-    savePassenger(passenger:Passenger) {
-        // var passengerToSave: Passenger = {
-        //     id: null,
-        //     name: "shai"
-        // }
+   savePassengerFirebase(passengerToSave:Passenger) {
+        let uuid = UUID.UUID();
+        this.passengerCollection.add({id:uuid,name:passengerToSave.name,destination:passengerToSave.destination});
+   }
+   
+    // getPassengers() {
+    //    return this.http.get(`http://localhost:50751/api/Passenger/`)
+    //     .map((res:Response) => res.json());
+    // }
+    // getSepcificPassenger(passengerID) {
+    //    return this.http.get(`http://localhost:50751/api/Passenger/` + passengerID)
+    //     .map((res:Response) => res.json());
+    // }
+    // savePassenger(passenger:Passenger) {
+    //     // var passengerToSave: Passenger = {
+    //     //     id: null,
+    //     //     name: "shai"
+    //     // }
               
-         let headers = new Headers({ 'Content-Type': 'application/json' });
-         let options = new RequestOptions({ headers: headers });
+    //      let headers = new Headers({ 'Content-Type': 'application/json' });
+    //      let options = new RequestOptions({ headers: headers });
 
-         return this.http.post('http://localhost:50751/api/Passenger/',passenger,headers)
-         .map((res:Response) => res.json());
-    }
+    //      return this.http.post('http://localhost:50751/api/Passenger/',passenger,headers)
+    //      .map((res:Response) => res.json());
+    // }
 
 }

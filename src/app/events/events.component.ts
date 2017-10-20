@@ -89,7 +89,7 @@ export class EventsComponent implements OnInit {
   //   { color: 'yellow', value: '#ff0' },
   //   { color: 'black', value: '#000' }
   // ];
-
+  
   protected passengersList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
   protected driversList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
   private eventsCollection: AngularFirestoreCollection<tripEvent>;
@@ -98,13 +98,15 @@ export class EventsComponent implements OnInit {
 
   onEdit: boolean = false;
   events: tripEvent[] = [];
-  passengers: Passenger[] = [];
+  passengers:Array<Passenger>;// [{id:"0", name:"1" ,destination:"1"}];
+ // passengers: any[] = [];
   drivers: driver[] = [];
   selectedPassengersMap: {} = {};
-  selectedPassengers: Passenger[] = [];
+  selectedPassengers: Array<Passenger> = [];
   selectedDriversMap: {} = {};
   selectedDrivers: Passenger[] = [];
 
+  passengerToPush:Passenger;
   // selectedPassengerName : string;
 
   constructor(private eventsService: EventsService,
@@ -166,6 +168,7 @@ export class EventsComponent implements OnInit {
     this.eventsService.deleteEvent(tripEvent);
   }
   saveEventFireBase() {
+    this.editedCalendarEvent.passengers = this.selectedPassengers;
     this.eventsCollection.add(this.editedCalendarEvent);
   }
   updateEventFireBase(tripEvent: tripEvent) {
@@ -182,16 +185,21 @@ export class EventsComponent implements OnInit {
   initSelectedList(list): void {
     for (var i = 0; i < list.length; i++) {
       //  this.selectedPassengers = ({[this.passengers[i].name] : true}); 
-      this.selectedPassengersMap[this.passengers[i].name] = false;
+      this.selectedPassengersMap[this.passengers[i].id] = false;
     }
   }
   updateCheckedOptions(passenger, event) {
-    this.selectedPassengersMap[passenger.name] = event.target.checked;
+    this.selectedPassengersMap[passenger.id] = event.target.checked;
   }
   updateSelectedPassengers() {
+    
+    
     for (var x in this.selectedPassengersMap) {
       if (this.selectedPassengersMap[x])
-        this.selectedPassengers.push(this.passengers[x]);
+      {
+        this.passengerToPush = this.passengers.find(passenger => passenger.id == x );//.map(y => this.passengerToPush = y);
+        this.selectedPassengers.push(this.passengerToPush);//this.passengers.filter(passenger => passenger.id == x)
+      }
     }
   }
   checkForPassengers() {

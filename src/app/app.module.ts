@@ -29,11 +29,20 @@ import { DemoUtilsModule } from './demo-utils/module';
 
 import { EventsComponent } from './events/events.component';
 
+//login
+import { loginComponent } from './login/login.component';
+
 //AngularFireModule
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
 
+/*auth*/
+import { AuthGuard } from './shared/auth-guard.service';
+/*auth*/
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import { CanActivate, Router } from '@angular/router';
 
 /* calendar*/
 const appRoutes: Routes = [
@@ -41,14 +50,16 @@ const appRoutes: Routes = [
   { path:'drivers', component: DriverComponent },
   { path: 'add-event' , component: AddEventComponent },
   { path: 'calendar' , component: CalendarDayViewComponent },
-  { path: 'events', component: EventsComponent },
+  { path: 'events', component: EventsComponent, canActivate: [AuthGuard] },
   { path: 'trips', component: TripComponent },
+  { path: 'login', component: loginComponent },
 
 ]
 
 @NgModule({
   declarations: [
-    AppComponent, PassengerComponent, DriverComponent, TripComponent, TripFormComponent,CalendarDayViewComponent, AddEventComponent,EventsComponent
+    AppComponent, PassengerComponent, DriverComponent, TripComponent, TripFormComponent,CalendarDayViewComponent, AddEventComponent,EventsComponent,
+    loginComponent
   ],
   imports: [
     BrowserModule,
@@ -63,10 +74,10 @@ const appRoutes: Routes = [
     DemoUtilsModule,
     Ng2CompleterModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
     // , DemoModule
   ],
-  providers: [],
+  providers: [AuthGuard,AngularFireAuth],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

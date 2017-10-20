@@ -1,0 +1,26 @@
+<div *ngIf="afAuth.authState | async; let user; else showLogin">
+    <h1>Hello {{ user.displayName }}!</h1>
+    <button (click)="logout()">Logout</button>
+  </div>
+  <ng-template #showLogin>
+    <p>Please login or sign up.</p>
+    <!-- <button (click)="login()">Login with Google</button> -->
+    <label>Email</label>
+    <input type="email" [(ngModel)]="email">
+    <br>
+    <label>Password</label>
+    <input type="password" [(ngModel)]="password">
+    <button (click)="login()">signIn</button>
+    <button (click)="signUp()">signUp</button>
+  </ng-template>
+  <span *ngIf="errorCode">{{errorCode}}</span>
+  <span *ngIf="errorMessage">{{errorMessage}}</span>
+  
+  <!-- <button (click)="showSignUp=!showSignUp">signUp</button>
+  <div *ngIf="showSignUp">
+    <label>Email</label>
+    <input type="email" [(ngModel)]="email">
+    <br>
+    <label>Password</label>
+    <input type="password" [(ngModel)]="password">
+  </div> -->

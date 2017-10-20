@@ -76,7 +76,7 @@ export class EventsService {
     }
 
     saveEvent() {
-        var passenger1: Passenger = new Passenger(1, "test");
+        var passenger1: Passenger = ({id:"1", name:"test",destination:"0"});
         var arr: Array<Passenger> = [passenger1, passenger1];
 
         // var arr: Array<{id: number, name: string}> = [{id:null,name:"passenger1"},{id:null,name:"passenger1"}];
@@ -100,6 +100,7 @@ export class EventsService {
         var driver: driver = {
             id: null,
             name: "driverTest"
+            // destination:"0"
         }
 
 
