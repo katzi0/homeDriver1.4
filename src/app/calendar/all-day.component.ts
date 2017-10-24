@@ -18,7 +18,7 @@ import {
   CalendarEventTitleFormatter,
   CalendarDateFormatter
 } from 'angular-calendar';
-import { tripEvent } from '../calendar/tripEvent.interface';
+import { tripEvent, tripEventID } from '../calendar/tripEvent.interface';
 import { CustomDateFormatter } from './custom-data-formatter';
 
 
@@ -98,7 +98,7 @@ export class CalendarDayViewComponent implements OnInit {
   refresh: Subject<any> = new Subject();
 
   titles: string[] = ["1","2","3"];
- events: tripEvent[] = [];
+ events: tripEventID[] = [];
  eventsFireBase: Observable<tripEvent[]>;
 
   activeDayIsOpen: boolean = true;
@@ -113,7 +113,9 @@ export class CalendarDayViewComponent implements OnInit {
     //  {this.events = data,
     //    console.log(this.events),this.stringToDate(),this.refresh.next();} )
 
-     this.eventService.getEventsFireBase().map(events => events.filter(event => event.isActive)).subscribe(data=>{this.events = data,console.log("events:"+this.events);});
+     this.eventService.getEventsFireBase()
+                      .map(events => events.filter(event => event.isActive))
+                      .subscribe(data=>{this.events = data,console.log("events:"+this.events);});
       
   }
 

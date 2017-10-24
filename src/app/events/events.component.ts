@@ -4,7 +4,7 @@ import {
   CalendarEvent,
   CalendarEventAction,
 } from 'angular-calendar';
-import { tripEvent } from '../calendar/tripEvent.interface';
+import { tripEvent, tripEventID } from '../calendar/tripEvent.interface';
 
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
@@ -32,6 +32,9 @@ import { Passenger } from '../passenger/passenger';
 import { driverService } from '../driver/driver.service';
 import { driver } from '../driver/driver';
 
+/*permissions*/
+import { loginService } from '../login/login.service';
+import { userRole } from 'app/login/user.interface';
 
 const colors: any = {
   red: {
@@ -52,13 +55,13 @@ const colors: any = {
   // moduleId: module.id,
   selector: 'events',
   templateUrl: 'events.component.html',
-  providers: [EventsService, PassengerService, driverService]
+  providers: [EventsService, PassengerService, driverService,loginService]
 })
 
 export class EventsComponent implements OnInit {
   //@Input() calendarEvent : CalendarEvent;
   editedCalendarEvent: tripEvent = {
-    id: null,
+  //  id: null,
     title: 'New edited event',
     start: startOfDay(new Date()),
     end: endOfDay(new Date()),
@@ -97,7 +100,7 @@ export class EventsComponent implements OnInit {
   //  lastEventID:string;
 
   onEdit: boolean = false;
-  events: tripEvent[] = [];
+  events: tripEventID[] = [];
   passengers:Array<Passenger>;// [{id:"0", name:"1" ,destination:"1"}];
  // passengers: any[] = [];
   drivers: driver[] = [];
@@ -107,39 +110,34 @@ export class EventsComponent implements OnInit {
   selectedDrivers: Passenger[] = [];
 
   passengerToPush:Passenger;
-  // selectedPassengerName : string;
+ 
+  permissions:userRole = {
+    Passenger:null,
+    Driver:null,
+    Admin:null
+};
 
   constructor(private eventsService: EventsService,
     private PassengerService: PassengerService,
     private driverService: driverService,
     private completerService: CompleterService,
-    afs: AngularFirestore) {
+    private afs: AngularFirestore,
+    private ls:loginService) {
     this.eventsCollection = afs.collection<tripEvent>('calendarEvent');
+    ls.getUserPermissions().subscribe(data => this.permissions =  data[0].role);
     // this.dataService = completerService.local(this.searchData, 'color', 'color');
   }
 
   ngOnInit() {
-    // this.eventsService.getEvents().subscribe(data => {console.log(data)});
-
-    //  this.PassengerService.getPassengers().subscribe( PassengersData =>{ this.passengers= PassengersData, console.log("passengers:" + this.passengers)
-    //  this.passengersList = PassengersData.map(function(passenger){return passenger.name})
-    // ,this.initSelectedList(this.passengers),console.log("passenger2s:" + this.passengersList)});
-
-    // this.driverService.getdrivers().subscribe( DriversData => { this.drivers = DriversData,
-    // this.driversList = DriversData.map(function(driver){return driver.name})
-    // ,this.initSelectedList(this.drivers),console.log("drivers:" + this.driversList)});
-    //this.eventsList = this.eventsService.getEventsFireBase();
     this.eventsService.getEventsFireBase()
       .map(events => events
-        .filter(event => event.isActive))
+      .filter(event => event.isActive))
       .subscribe(data => {
         this.events = data,
           console.log("events:" + this.events)
       });
       this.PassengerService.getPassengersFirebase()
       .subscribe(data => { this.passengers = data, console.log("passengers:" + this.passengers)});
-    
-    
     }
 
   addEvent(): void {
@@ -164,24 +162,27 @@ export class EventsComponent implements OnInit {
     });
 
   }
-  deleteEvent(tripEvent: tripEvent) {
+  deleteEvent(tripEvent: tripEventID) {
     this.eventsService.deleteEvent(tripEvent);
   }
   saveEventFireBase() {
+    this.updateSelectedPassengers();
     this.editedCalendarEvent.passengers = this.selectedPassengers;
+    //this.editedCalendarEvent.id = this.afs.createId();
     this.eventsCollection.add(this.editedCalendarEvent);
   }
-  updateEventFireBase(tripEvent: tripEvent) {
+  updateEventFireBase(tripEvent: tripEventID) {
     this.eventsService.updateEvent(tripEvent);
   }
-  deActivateEvent(tripEvent: tripEvent) {
+  deActivateEvent(tripEvent: tripEventID) {
+   // this.eventsService.deleteEvent(tripEvent);
     this.eventsService.deActivateEvent(tripEvent);
   }
-  saveEvent(): void {
-    this.eventsService.saveEvents(this.editedCalendarEvent).subscribe(data => {
-      this.events.push(data), console.log(data)
-    });
-  }
+  // saveEvent(): void {
+  //   this.eventsService.saveEvents(this.editedCalendarEvent).subscribe(data => {
+  //     this.events.push(data), console.log(data)
+  //   });
+  // }
   initSelectedList(list): void {
     for (var i = 0; i < list.length; i++) {
       //  this.selectedPassengers = ({[this.passengers[i].name] : true}); 
@@ -192,8 +193,6 @@ export class EventsComponent implements OnInit {
     this.selectedPassengersMap[passenger.id] = event.target.checked;
   }
   updateSelectedPassengers() {
-    
-    
     for (var x in this.selectedPassengersMap) {
       if (this.selectedPassengersMap[x])
       {
@@ -205,8 +204,18 @@ export class EventsComponent implements OnInit {
   checkForPassengers() {
 
   }
-
-  // autocomplete select event -  passengers
+  removeFromTrip(event,passenger){
+    console.log("passnerger:" + passenger + "/n" + "event:" + event);
+    this.eventsService.removePassengersFromTrip(event,passenger);
+  }
+ 
+  //remove selected passenger from event
+  removePassengerFromEvent(passenger) {
+    this.editedCalendarEvent.passengers.splice(passenger, 1);
+    this.selectedPassengers.splice(passenger, 1);
+    this.passengersList.push(passenger);
+  }
+ // autocomplete select event -  passengers
   // onSelect(item: CompleterItem){
   //  if(item) {
   //   this.editedCalendarEvent.passengers.push(this.passengers.find(x=> x.name == item.title));
@@ -223,11 +232,4 @@ export class EventsComponent implements OnInit {
   //   // this.selectedPassengerName = item.title;
   //   }
   // }
-
-  //remove selected passenger from event
-  removePassengerFromEvent(passenger) {
-    this.editedCalendarEvent.passengers.splice(passenger, 1);
-    this.selectedPassengers.splice(passenger, 1);
-    this.passengersList.push(passenger);
-  }
 }

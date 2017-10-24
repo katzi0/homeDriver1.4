@@ -11,7 +11,7 @@ import { CanActivate, Router } from '@angular/router';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private auth: AngularFireAuth, private router: Router) {}
-
+  
   canActivate(): Observable<boolean> {
     return this.auth.authState
       .take(1)

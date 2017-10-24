@@ -1,6 +1,6 @@
 export class User {
-    id: string;
-    username: string;
+    email: string;
+    // username: string;
     password: string;
     firstName: string;
     lastName: string;
@@ -8,7 +8,8 @@ export class User {
     role:userRole;
 }
 
-export enum userRole {
-    Passenger,
-    driver
+export interface userRole {
+    Passenger:boolean;
+    Driver?:boolean;
+    Admin?:boolean;
 }

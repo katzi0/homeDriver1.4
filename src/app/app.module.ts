@@ -46,12 +46,12 @@ import { CanActivate, Router } from '@angular/router';
 
 /* calendar*/
 const appRoutes: Routes = [
-  { path:'passengers', component: PassengerComponent },
-  { path:'drivers', component: DriverComponent },
-  { path: 'add-event' , component: AddEventComponent },
-  { path: 'calendar' , component: CalendarDayViewComponent },
+  { path:'passengers', component: PassengerComponent, canActivate: [AuthGuard] },
+  { path:'drivers', component: DriverComponent, canActivate: [AuthGuard] },
+  { path: 'add-event' , component: AddEventComponent, canActivate: [AuthGuard] },
+  { path: 'calendar' , component: CalendarDayViewComponent, canActivate: [AuthGuard] },
   { path: 'events', component: EventsComponent, canActivate: [AuthGuard] },
-  { path: 'trips', component: TripComponent },
+  { path: 'trips', component: TripComponent, canActivate: [AuthGuard] },
   { path: 'login', component: loginComponent },
 
 ]

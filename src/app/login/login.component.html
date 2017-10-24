@@ -1,13 +1,20 @@
-<div *ngIf="afAuth.authState | async; let user; else showLogin">
+<div *ngIf="afAuth.authState | async; let user; else showLoginSignUp">
     <h1>Hello {{ user.displayName }}!</h1>
     <button (click)="logout()">Logout</button>
   </div>
-  <ng-template #showLogin>
-    <p>Please login or sign up.</p>
-    <!-- <button (click)="login()">Login with Google</button> -->
+  <ng-template #showLoginSignUp>
+    <p *ngIf="showLogin">Please login or <span (click)="showLogin=!showLogin"><b>sign up</b></span></p>
+    <p *ngIf="!showLogin">Please <span (click)="showLogin=!showLogin"><b>login</b></span> or sign up</p>
+    <span *ngIf="!showLogin">
+    <label>firstName</label>
+    <input type="text" [(ngModel)]="user.firstName"><br>
+    <label>lastName</label> 
+    <input type="text" [(ngModel)]="user.lastName"><br>
+    <label>destination</label>
+    <input type="text" [(ngModel)]="user.destination"><br>
+  </span>
     <label>Email</label>
-    <input type="email" [(ngModel)]="email">
-    <br>
+    <input type="email" [(ngModel)]="email"><br>
     <label>Password</label>
     <input type="password" [(ngModel)]="password">
     <button (click)="login()">signIn</button>
@@ -15,7 +22,9 @@
   </ng-template>
   <span *ngIf="errorCode">{{errorCode}}</span>
   <span *ngIf="errorMessage">{{errorMessage}}</span>
-  
+  <!-- <button (click)="getSignedUserDetails()" type="button">print current user</button> -->
+  <button (click)="fillFieldsForTesting()" type="button">fill fields  </button>
+  <!-- y -->
   <!-- <button (click)="showSignUp=!showSignUp">signUp</button>
   <div *ngIf="showSignUp">
     <label>Email</label>
@@ -24,3 +33,16 @@
     <label>Password</label>
     <input type="password" [(ngModel)]="password">
   </div> -->
+  <br>
+  <label><b>logged user permissions</b></label>
+  <div *ngFor="let user of usersList">
+    passenger: {{user.role.Passenger}} <br>
+    Driver: {{user.role.Driver}} <br>
+    Admin: {{user.role.Admin}}
+  </div>
+<label><b>logged user permissions</b></label>
+  <div>
+    passenger: {{permissions.Passenger}} <br>
+    Driver: {{permissions.Driver}} <br>
+    Admin: {{permissions.Admin}}
+  </div>

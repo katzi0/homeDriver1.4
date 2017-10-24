@@ -1,21 +1,28 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-10" style="direction: rtl">
+    <!-- <div class="col-md-10"> -->
+            
       <ng-template #modalContent let-close="close">
-        <div class="modal-header">
-          <h5 class="modal-title">Event action occurred</h5>
+        <div class="modal-header" style="direction: rtl">
+          <h5 class="modal-title">נסיעה {{modalData?.event.title}}</h5>
           <button type="button" class="close" (click)="close()">
       <span aria-hidden="true">&times;</span>
     </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="direction: rtl">
           <div>
-            Action:
-            <pre>{{ modalData?.action }}</pre>
+            נהג
+            <!-- <pre>{{ modalData?.action }}</pre> -->
+             <pre>{{ modalData?.event.driver }}</pre>
           </div>
           <div>
-            Event:
-            <pre>{{ modalData?.event | json }}</pre>
+            נוסעים
+            <!-- <pre>{{ modalData?.event | json }}</pre> -->
+            <div *ngFor="let passenger of modalData?.event.passengers">
+              <span>{{ passenger.name }}</span>
+              <span>{{ passenger.destination }}</span>
+            </div>            
           </div>
         </div>
         <div class="modal-footer">

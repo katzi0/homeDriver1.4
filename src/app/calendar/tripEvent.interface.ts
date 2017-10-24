@@ -8,8 +8,12 @@ import {
   import { driver} from '../driver/driver';
   
 export interface tripEvent extends CalendarEvent  {
-    id:string;
+    //id:string;
     passengers:Passenger[];
     driver:driver;
     isActive:boolean;
+}
+
+export interface tripEventID extends tripEvent {
+    id:string
 }
