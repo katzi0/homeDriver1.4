@@ -34,7 +34,7 @@ export class PassengerService {
    }
    savePassengerFirebase(passengerToSave:Passenger) {
         let uuid = UUID.UUID();
-        this.passengerCollection.add({id:uuid,name:passengerToSave.name,destination:passengerToSave.destination});
+        this.passengerCollection.add({id:uuid,name:passengerToSave.name,destination:passengerToSave.destination,email:passengerToSave.email});
    }
    
     // getPassengers() {

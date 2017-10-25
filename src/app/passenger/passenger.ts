@@ -3,6 +3,7 @@ export class Passenger {
     public id: string;
     public name: string;
     public destination: string;
+    public email: string;
    // )
    // {}
 }

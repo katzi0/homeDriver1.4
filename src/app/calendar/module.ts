@@ -7,7 +7,7 @@ import { DemoUtilsModule } from '../demo-utils/module';
 import { CalendarDayViewComponent } from './all-day.component';
 import { AddEventComponent } from './add-event.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
 @NgModule({
   imports: [
     CommonModule,
@@ -15,7 +15,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule,
     NgbModalModule.forRoot(),
     CalendarModule.forRoot(),
-    DemoUtilsModule
+    DemoUtilsModule,AngularFontAwesomeModule
   ],
   declarations: [
     //CalendarDayViewComponent,

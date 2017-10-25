@@ -59,7 +59,7 @@ export class loginService{
         return null;
     }
 }
-getUserPermissions(){
+getUserDetails(){
     return this.usersList;
 }
       

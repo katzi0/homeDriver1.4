@@ -3,28 +3,27 @@
   <br> Driver: {{permissions.Driver}}
   <br> Admin: {{permissions.Admin}}
 </div>
-<div *ngIf="permissions.Admin">
+<div class="container" *ngIf="permissions.Admin">
   <div class="row">
-
-    <div class="col-md-10">
+    <div class="col-md-12">
       <h3>
-        Edit events
-        <button class="btn btn-primary pull-right" (click)="addEvent()">
-          Add new
-        </button>
-        <button class="btn btn-default pull-right" (click)="showAllEvents=!showAllEvents">show all</button>
-        <div class="clearfix"></div>
+        ניהול ועריכת נסיעות
       </h3>
-      <table class="table table-bordered">
+      <button class="btn btn-primary pull-right" (click)="addEvent()">
+          נסיעה חדשה
+        </button>
+        <button class="btn btn-default pull-right" (click)="showAllEvents=!showAllEvents">הצג נסיעות</button>
+        <div class="clearfix"></div>
+      <table class="table table-bordered" style="direction: RTL">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Primary color</th>
-            <th>Secondary color</th>
-            <th>Starts at</th>
-            <th>Ends at</th>
-            <th>Remove</th>
-            <th>passengers</th>
+            <th>כיוון</th>
+            <th>צבע</th>
+            <th>צבע משני</th>
+            <th>התחלה</th>
+            <th>סוף</th>
+            <th>הסרה</th>
+            <th>נוסעים</th>
           </tr>
         </thead>
 
@@ -107,26 +106,36 @@
               save event
             </button>
           </td>
+          <td>
+            <span *ngFor="let selectedPassenger of selectedPassengers;">
+              {{selectedPassenger.name}}
+            </span>
+          </td>
         </tr>
         </tbody>
       </table>
     </div>
 
   </div>
-  <div class="col-md-10">
+  <div class="col-md-5">
     <span>select passengers for trip</span>
-    <div *ngFor="let passenger of passengers;">
-      <input type="checkbox" value="{{passenger}}" [checked]="passengers.indexOf[passenger] >= 0"
-       (change)="updateCheckedOptions(passenger, $event)"/>
+    <ul class="list-group">
+      <li *ngFor="let passenger of passengers;" [ngClass]="checkIfPassengerSelected(passenger)" (click)="toggleSelectedPassenger(passenger)">
+        {{passenger.name}}
+      </li>
+    </ul>
+    <!-- <div *ngFor="let passenger of passengers;">
+      <input type="checkbox" value="{{passenger}}" [checked]="passengers.indexOf[passenger] >= 0" (change)="updateCheckedOptions(passenger, $event)"
+      />
       <span>{{passenger.name}}</span>
-    </div>
+    </div> -->
   </div>
   <!-- <button type="button" (click)="updateSelectedPassengers()">שמור נוסעים</button>
   <input type="text" (change)="checkForPassengers()"> -->
 
 
   <!-- <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0"></ng2-completer> -->
-  <h1>Search passenger</h1>
+  <!-- <h1>Search passenger</h1>
 
   <p>selected passenger</p>
   <div *ngFor="let passenger of selectedPassengers">
@@ -135,10 +144,10 @@
   </div>
 
 
-  <h1>Search driver</h1>
+  <h1>Search driver</h1> -->
   <!-- <ng2-completer [(ngModel)]="driver" [datasource]="driversList" [minSearchLength]="0" (selected)="onSelectDriver($event)"></ng2-completer> -->
 
-  <p>selected driver</p>
+  <!-- <p>selected driver</p>
   <div *ngFor="let driver of selectedDrivers">
     <span>{{driver.name}}</span>
   </div>
@@ -151,6 +160,6 @@
       {{ event.title }}
 
     </li>
-  </ul>
+  </ul> -->
 
 </div>

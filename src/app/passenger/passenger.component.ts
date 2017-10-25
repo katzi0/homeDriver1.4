@@ -22,9 +22,9 @@ export class PassengerComponent implements OnInit {
     passengers:Passenger[] = [];
     // passengers:Observable<ItemId[]>;
     // items:Observable<ItemId[]>;
-    passengerToSave:Passenger = {id:"0", name:"passenger to save", destination:"none"};//new Passenger(id:"0", name:"passenger to save", destination:"none");
+    passengerToSave:Passenger = {id:"0", name:"passenger to save", destination:"none",email:"none"};//new Passenger(id:"0", name:"passenger to save", destination:"none");
     // item:Observable<ItemId[]>;
-    currentPassengerLoggedIn: Passenger = {id:"0", name:"passenger to save", destination:"none"};//new Passenger("0", "passenger to save","none");
+    currentPassengerLoggedIn: Passenger = {id:"0", name:"passenger to save", destination:"none",email:"none"};//new Passenger("0", "passenger to save","none");
 
     
     // passengerToSave: Passenger = new Passenger(null, "passenger to save");

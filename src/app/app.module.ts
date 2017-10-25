@@ -44,6 +44,9 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { CanActivate, Router } from '@angular/router';
 
+/*font awasome*/
+import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
+
 /* calendar*/
 const appRoutes: Routes = [
   { path:'passengers', component: PassengerComponent, canActivate: [AuthGuard] },
@@ -75,6 +78,7 @@ const appRoutes: Routes = [
     Ng2CompleterModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    AngularFontAwesomeModule
     // , DemoModule
   ],
   providers: [AuthGuard,AngularFireAuth],

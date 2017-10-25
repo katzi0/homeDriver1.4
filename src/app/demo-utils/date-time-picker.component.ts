@@ -46,7 +46,7 @@ import {
         </div>
       </div>
     </form>
-    <ngb-timepicker [(ngModel)]="timeStruct" (ngModelChange)="updateTime()" [meridian]="true"></ngb-timepicker>
+    <ngb-timepicker [(ngModel)]="timeStruct" (ngModelChange)="updateTime()" [meridian]="false"></ngb-timepicker>
   `,
   styles: [`
     .form-group {

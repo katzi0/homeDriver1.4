@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+
 import { EventsService } from './events.service';
 import {
   CalendarEvent,
@@ -55,13 +56,13 @@ const colors: any = {
   // moduleId: module.id,
   selector: 'events',
   templateUrl: 'events.component.html',
-  providers: [EventsService, PassengerService, driverService,loginService]
+  providers: [EventsService, PassengerService, driverService, loginService]
 })
 
 export class EventsComponent implements OnInit {
   //@Input() calendarEvent : CalendarEvent;
   editedCalendarEvent: tripEvent = {
-  //  id: null,
+    //  id: null,
     title: 'New edited event',
     start: startOfDay(new Date()),
     end: endOfDay(new Date()),
@@ -92,7 +93,7 @@ export class EventsComponent implements OnInit {
   //   { color: 'yellow', value: '#ff0' },
   //   { color: 'black', value: '#000' }
   // ];
-  
+
   protected passengersList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
   protected driversList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
   private eventsCollection: AngularFirestoreCollection<tripEvent>;
@@ -101,44 +102,44 @@ export class EventsComponent implements OnInit {
 
   onEdit: boolean = false;
   events: tripEventID[] = [];
-  passengers:Array<Passenger>;// [{id:"0", name:"1" ,destination:"1"}];
- // passengers: any[] = [];
+  passengers: Array<Passenger>;// [{id:"0", name:"1" ,destination:"1"}];
+  // passengers: any[] = [];
   drivers: driver[] = [];
   selectedPassengersMap: {} = {};
   selectedPassengers: Array<Passenger> = [];
   selectedDriversMap: {} = {};
   selectedDrivers: Passenger[] = [];
 
-  passengerToPush:Passenger;
- 
-  permissions:userRole = {
-    Passenger:null,
-    Driver:null,
-    Admin:null
-};
+  passengerToPush: Passenger;
+
+  permissions: userRole = {
+    Passenger: null,
+    Driver: null,
+    Admin: null
+  };
 
   constructor(private eventsService: EventsService,
     private PassengerService: PassengerService,
     private driverService: driverService,
     private completerService: CompleterService,
     private afs: AngularFirestore,
-    private ls:loginService) {
+    private ls: loginService) {
     this.eventsCollection = afs.collection<tripEvent>('calendarEvent');
-    ls.getUserPermissions().subscribe(data => this.permissions =  data[0].role);
+    ls.getUserDetails().subscribe(data => this.permissions = data[0].role);
     // this.dataService = completerService.local(this.searchData, 'color', 'color');
   }
 
   ngOnInit() {
     this.eventsService.getEventsFireBase()
       .map(events => events
-      .filter(event => event.isActive))
+        .filter(event => event.isActive))
       .subscribe(data => {
         this.events = data,
           console.log("events:" + this.events)
       });
-      this.PassengerService.getPassengersFirebase()
-      .subscribe(data => { this.passengers = data, console.log("passengers:" + this.passengers)});
-    }
+    this.PassengerService.getPassengersFirebase()
+      .subscribe(data => { this.passengers = data, console.log("passengers:" + this.passengers) });
+  }
 
   addEvent(): void {
     this.events.push({
@@ -166,7 +167,7 @@ export class EventsComponent implements OnInit {
     this.eventsService.deleteEvent(tripEvent);
   }
   saveEventFireBase() {
-    this.updateSelectedPassengers();
+
     this.editedCalendarEvent.passengers = this.selectedPassengers;
     //this.editedCalendarEvent.id = this.afs.createId();
     this.eventsCollection.add(this.editedCalendarEvent);
@@ -175,7 +176,7 @@ export class EventsComponent implements OnInit {
     this.eventsService.updateEvent(tripEvent);
   }
   deActivateEvent(tripEvent: tripEventID) {
-   // this.eventsService.deleteEvent(tripEvent);
+    // this.eventsService.deleteEvent(tripEvent);
     this.eventsService.deActivateEvent(tripEvent);
   }
   // saveEvent(): void {
@@ -194,28 +195,53 @@ export class EventsComponent implements OnInit {
   }
   updateSelectedPassengers() {
     for (var x in this.selectedPassengersMap) {
-      if (this.selectedPassengersMap[x])
-      {
-        this.passengerToPush = this.passengers.find(passenger => passenger.id == x );//.map(y => this.passengerToPush = y);
-        this.selectedPassengers.push(this.passengerToPush);//this.passengers.filter(passenger => passenger.id == x)
+      this.passengerToPush = this.passengers.find(passenger => passenger.id == x);
+      if (this.selectedPassengersMap[x]) {
+        //.map(y => this.passengerToPush = y);
+        if (!this.selectedPassengers.find(passenger => this.passengerToPush.id == passenger.id)){
+          this.selectedPassengers.push(this.passengerToPush);//this.passengers.filter(passenger => passenger.id == x)
+        }
+      }
+      else {
+        let index = this.selectedPassengers.findIndex(passenger => this.passengerToPush == passenger);
+
+        if (index > -1) {
+          this.selectedPassengers.splice(index, 1);
+        }
       }
     }
   }
   checkForPassengers() {
 
   }
-  removeFromTrip(event,passenger){
+  removeFromTrip(event, passenger) {
     console.log("passnerger:" + passenger + "/n" + "event:" + event);
-    this.eventsService.removePassengersFromTrip(event,passenger);
+    this.eventsService.removePassengersFromTrip(event, passenger);
   }
- 
+
   //remove selected passenger from event
   removePassengerFromEvent(passenger) {
     this.editedCalendarEvent.passengers.splice(passenger, 1);
     this.selectedPassengers.splice(passenger, 1);
     this.passengersList.push(passenger);
   }
- // autocomplete select event -  passengers
+
+  toggleSelectedPassenger(passenger: Passenger) {
+    if (this.selectedPassengersMap[passenger.id]) {
+      this.selectedPassengersMap[passenger.id] = false;
+    }
+    else {
+      this.selectedPassengersMap[passenger.id] = true;
+    }
+    this.updateSelectedPassengers();
+  }
+  checkIfPassengerSelected(passenger: Passenger) {
+    return {
+      'list-group-item': true,
+      'active': this.selectedPassengersMap[passenger.id]
+    }
+  }
+  // autocomplete select event -  passengers
   // onSelect(item: CompleterItem){
   //  if(item) {
   //   this.editedCalendarEvent.passengers.push(this.passengers.find(x=> x.name == item.title));
