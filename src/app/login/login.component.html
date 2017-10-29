@@ -1,31 +1,42 @@
 <div *ngIf="afAuth.authState | async; let user; else showLoginSignUp">
-    <h1>Hello {{ user.displayName }}!</h1>
-    <button (click)="logout()">Logout</button>
-  </div>
-  <ng-template #showLoginSignUp>
-    <p *ngIf="showLogin">Please login or <span (click)="showLogin=!showLogin"><b>sign up</b></span></p>
-    <p *ngIf="!showLogin">Please <span (click)="showLogin=!showLogin"><b>login</b></span> or sign up</p>
-    <span *ngIf="!showLogin">
+  <h1>Hello {{ user.displayName }}!</h1>
+  <button (click)="logout()">Logout</button>
+</div>
+<ng-template #showLoginSignUp>
+  <p *ngIf="showLogin">Please login or
+    <span (click)="showLogin=!showLogin">
+      <b>sign up</b>
+    </span>
+  </p>
+  <p *ngIf="!showLogin">Please
+    <span (click)="showLogin=!showLogin">
+      <b>login</b>
+    </span> or sign up</p>
+  <span *ngIf="!showLogin">
     <label>firstName</label>
-    <input type="text" [(ngModel)]="user.firstName"><br>
-    <label>lastName</label> 
-    <input type="text" [(ngModel)]="user.lastName"><br>
+    <input type="text" [(ngModel)]="user.firstName">
+    <br>
+    <label>lastName</label>
+    <input type="text" [(ngModel)]="user.lastName">
+    <br>
     <label>destination</label>
-    <input type="text" [(ngModel)]="user.destination"><br>
+    <input type="text" [(ngModel)]="user.destination">
+    <br>
   </span>
-    <label>Email</label>
-    <input type="email" [(ngModel)]="email"><br>
-    <label>Password</label>
-    <input type="password" [(ngModel)]="password">
-    <button (click)="login()">signIn</button>
-    <button (click)="signUp()">signUp</button>
-  </ng-template>
-  <span *ngIf="errorCode">{{errorCode}}</span>
-  <span *ngIf="errorMessage">{{errorMessage}}</span>
-  <!-- <button (click)="getSignedUserDetails()" type="button">print current user</button> -->
-  <button (click)="fillFieldsForTesting()" type="button">fill fields  </button>
-  <!-- y -->
-  <!-- <button (click)="showSignUp=!showSignUp">signUp</button>
+  <label>Email</label>
+  <input type="email" [(ngModel)]="email">
+  <br>
+  <label>Password</label>
+  <input type="password" [(ngModel)]="password">
+  <button (click)="login()">signIn</button>
+  <button (click)="signUp()">signUp</button>
+</ng-template>
+<span *ngIf="errorCode">{{errorCode}}</span>
+<span *ngIf="errorMessage">{{errorMessage}}</span>
+<!-- <button (click)="getSignedUserDetails()" type="button">print current user</button> -->
+<button (click)="fillFieldsForTesting()" type="button">fill fields </button>
+<!-- y -->
+<!-- <button (click)="showSignUp=!showSignUp">signUp</button>
   <div *ngIf="showSignUp">
     <label>Email</label>
     <input type="email" [(ngModel)]="email">
@@ -33,16 +44,91 @@
     <label>Password</label>
     <input type="password" [(ngModel)]="password">
   </div> -->
-  <br>
-  <label><b>logged user permissions</b></label>
-  <div *ngFor="let user of usersList">
-    passenger: {{user.role.Passenger}} <br>
-    Driver: {{user.role.Driver}} <br>
-    Admin: {{user.role.Admin}}
-  </div>
-<label><b>logged user permissions</b></label>
-  <div>
-    passenger: {{permissions.Passenger}} <br>
-    Driver: {{permissions.Driver}} <br>
-    Admin: {{permissions.Admin}}
-  </div>
+<!-- <br>
+<label>
+  <b>logged user permissions</b>
+</label>
+<div *ngFor="let user of usersList">
+  passenger: {{user.role.Passenger}}
+  <br> Driver: {{user.role.Driver}}
+  <br> Admin: {{user.role.Admin}}
+</div>
+<label>
+  <b>logged user permissions</b>
+</label>
+<div>
+  passenger: {{permissions.Passenger}}
+  <br> Driver: {{permissions.Driver}}
+  <br> Admin: {{permissions.Admin}}
+</div> -->
+
+
+<div class="container">
+
+  <form class="form-signin" #loginForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="showLogin">
+
+    <h2 class="form-signin-heading">כניסה</h2>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" [(ngModel)]="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address"
+      required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" [(ngModel)]="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password"
+      required>
+    <div class="checkbox">
+      <!-- <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label> -->
+    </div>
+    <button type="submit" class="btn btn-success" [disabled]="!loginForm.form.valid">התחבר</button>
+    <button type="submit" class="btn btn-light" (click)="showLogin=!showLogin">
+      <span *ngIf="!showLogin">התחברות</span>
+      <span *ngIf="showLogin">הרשמה</span>
+    </button>
+  </form>
+  <form class="form-signin" #signUpForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="!showLogin" style="direction:rtl;">
+    <h2 class="form-signin-heading">הרשמה</h2>
+    <fieldset class="form-group">
+      <div class="form-check">
+        <label class="form-check-label">
+          נוסע
+          <input type="radio" class="form-check-input" name="optionsRadios" [(ngModel)]="isPassenger" id="isPassenger" value="1" checked>
+
+        </label>
+
+        <label class="form-check-label">
+          נהג
+          <input type="radio" class="form-check-input" name="optionsRadios" id="isDriver" value="2" [(ngModel)]="isPassenger">
+        </label>
+      </div>
+    </fieldset>
+    <label for="inputFirstName" class="sr-only">firstName</label>
+    <input type="text" [(ngModel)]="user.firstName" name="inputFirstName" id="inputFirstName" class="form-control" placeholder="שם פרטי"
+      required>
+    <label for="inputLastName" class="sr-only">LastName</label>
+    <input type="text" [(ngModel)]="user.lastName" name="inputLastName" id="inputLastName" class="form-control" placeholder="שם משפחה"
+      required>
+    <div *ngIf="isPassenger == 1">
+      <label for="inputDestination" class="sr-only">Destination</label>
+      <input type="text" [(ngModel)]="user.destination" name="inputDestination" id="inputDestination" class="form-control" placeholder="יעד ברירת מחדל"
+        required>
+    </div>
+    <div *ngIf="isPassenger == 2">
+        <label for="inputDestination" class="sr-only">numOfSeats</label>
+        <input type="number" [(ngModel)]="user.numOfSeats" name="inputnumOfSeats" id="inputnumOfSeats" class="form-control" placeholder="מספר מושבים ברכב"
+          required>
+      </div>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" [(ngModel)]="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address"
+      required>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" [(ngModel)]="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password"
+      required>
+    <button type="submit" class="btn btn-success" [disabled]="!signUpForm.form.valid">הירשם</button>
+    <button type="submit" class="btn btn-light" (click)="showLogin=!showLogin">
+      <span *ngIf="!showLogin">התחברות</span>
+      <span *ngIf="showLogin">הרשמה</span>
+    </button>
+  </form>
+  <span *ngIf="errorCode">{{errorCode}}</span>
+  <span *ngIf="errorMessage">{{errorMessage}}</span>
+</div>

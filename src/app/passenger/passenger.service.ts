@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { passengers } from './mock-passengers';
+// import { passengers } from './mock-passengers';
 import { Passenger } from './passenger';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 //RXJS stuff
@@ -10,31 +10,34 @@ import 'rxjs/add/operator/catch';
 import { AngularFirestore, AngularFirestoreCollection,AngularFirestoreDocument } from 'angularfire2/firestore';
 
 import { UUID } from 'angular2-uuid';
+import { User, userRole } from '../login/user.interface';
 
 
 @Injectable()
 export class PassengerService {
-    private passengerCollection:AngularFirestoreCollection<Passenger>;
-    passengerList:Observable<Passenger[]>;
-   
+    private passengerCollection:AngularFirestoreCollection<User>;
+    passengerList:Observable<User[]>;
+    userRole:userRole = {Driver:false, Passenger:true, Admin:false};
    constructor(private http: Http,private afs:AngularFirestore)
    {
-    this.passengerCollection = afs.collection<Passenger>('passengers');
+    this.passengerCollection = afs.collection<User>('users', ref => ref.where('role.Admin', '==', false).where('role.Driver', '==', false));
     this.passengerList = this.passengerCollection.snapshotChanges().map(a => {
         return a.map(b => {
-            const data = b.payload.doc.data() as Passenger;
+            const data = b.payload.doc.data() as User;
             const id = b.payload.doc.id;
             console.log(data, id);
             return { id, ...data };
         })
     })
    }
+
+
    getPassengersFirebase() {
        return this.passengerList;
    }
-   savePassengerFirebase(passengerToSave:Passenger) {
+   savePassengerFirebase(passengerToSave:User) {
         let uuid = UUID.UUID();
-        this.passengerCollection.add({id:uuid,name:passengerToSave.name,destination:passengerToSave.destination,email:passengerToSave.email});
+        this.passengerCollection.add({uid:uuid,firstName:passengerToSave.firstName,lastName:passengerToSave.lastName,destination:passengerToSave.destination,email:passengerToSave.email,password:passengerToSave.password,role:passengerToSave.role});
    }
    
     // getPassengers() {

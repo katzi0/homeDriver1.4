@@ -1,20 +1,4 @@
-<div>
-  passenger: {{permissions.Passenger}}
-  <br> Driver: {{permissions.Driver}}
-  <br> Admin: {{permissions.Admin}}
-</div>
-<div class="container" *ngIf="permissions.Admin">
-  <div class="row">
-    <div class="col-md-12">
-      <h3>
-        ניהול ועריכת נסיעות
-      </h3>
-      <button class="btn btn-primary pull-right" (click)="addEvent()">
-        נסיעה חדשה
-      </button>
-      <button class="btn btn-default pull-right" (click)="showAllEvents=!showAllEvents">הצג נסיעות</button>
-      <div class="clearfix"></div>
-      <table class="table table-bordered" style="direction: RTL">
+<table class="table table-bordered" style="direction: RTL">
         <thead>
           <tr>
             <th>כיוון</th>
@@ -66,7 +50,7 @@
             <td>
               <div *ngFor="let passenger of event.passengers">
                 <span (click)="removeFromTrip(event,passenger)">x</span>
-                {{passenger.firstName}}
+                {{passenger.name}}
               </div>
             </td>
           </tr>
@@ -96,8 +80,8 @@
           </td>
           <td>
             <!--  <button class="btn btn-danger" (click)="events.splice(index, 1)"> ; refresh.next()
-              Delete
-            </button>-->
+          Delete
+        </button>-->
             <br>
             <br>
             <br>
@@ -108,59 +92,9 @@
           </td>
           <td>
             <span *ngFor="let selectedPassenger of selectedPassengers;">
-              {{selectedPassenger.firstName}}
+              {{selectedPassenger.name}}
             </span>
           </td>
         </tr>
         </tbody>
       </table>
-      <!--implement later-->
-      <!-- <events-list></events-list> -->
-
-    </div>
-
-  </div>
-  <div class="col-md-5">
-    <span>select passengers for trip</span>
-    <ul class="list-group">
-      <li *ngFor="let passenger of passengers" [ngClass]="checkIfPassengerSelected(passenger)" (click)="toggleSelectedPassenger(passenger)">
-        {{passenger.firstName}}
-      </li>
-    </ul>
-    <!-- <div *ngFor="let passenger of passengers;">
-      <input type="checkbox" value="{{passenger}}" [checked]="passengers.indexOf[passenger] >= 0" (change)="updateCheckedOptions(passenger, $event)"
-      />
-      <span>{{passenger.name}}</span>
-    </div> -->
-  </div>
-  <!-- <button type="button" (click)="updateSelectedPassengers()">שמור נוסעים</button>
-  <input type="text" (change)="checkForPassengers()"> -->
-
-
-  <!-- <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0"></ng2-completer> -->
-  <!-- <h1>Search passenger</h1>
-
-  <p>selected passenger</p>
-  <div *ngFor="let passenger of selectedPassengers">
-    <span> {{passenger.name}}</span>
-    <span (click)="removePassengerFromEvent(passenger)">remove</span>
-  </div>
-
-
-  <h1>Search driver</h1> -->
-  <!-- <ng2-completer [(ngModel)]="driver" [datasource]="driversList" [minSearchLength]="0" (selected)="onSelectDriver($event)"></ng2-completer> -->
-
-  <!-- <p>selected driver</p>
-  <div *ngFor="let driver of selectedDrivers">
-    <span>{{driver.name}}</span>
-  </div>
-
-  <button type="button" (click)="saveEventFireBase()">save event firabase></button>
-
-
-  <ul>
-    <li class="text" *ngFor="let event of events">
-      {{ event.title }}
-
-    </li>
-  </ul> -->

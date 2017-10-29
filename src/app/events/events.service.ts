@@ -44,7 +44,7 @@ export class EventsService {
             return a.map(b => {
                 const data = b.payload.doc.data() as tripEvent;
                 const id = b.payload.doc.id;
-                console.log("data:" + data + "id:" + id);
+                console.log("data:" + data.passengers + "id:" + id);
                 return { id, ...data };
             })
         })
@@ -69,7 +69,7 @@ export class EventsService {
     }
     removePassengersFromTrip(trip:tripEventID,passenger:Passenger){
         this.itemToRemoveDoc = this.afs.doc<tripEventID>('calenderEvent/' + trip.id);
-        let index = trip.passengers.findIndex(p => p.id == passenger.id);
+        let index = trip.passengers.findIndex(p => p.uid == passenger.id);
         trip.passengers.splice(index,1);
         this.eventsCollection.doc(trip.id).update(trip);
     }

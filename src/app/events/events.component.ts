@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+import { EventsListComponent } from './events-list';
 import { EventsService } from './events.service';
 import {
   CalendarEvent,
@@ -35,7 +35,7 @@ import { driver } from '../driver/driver';
 
 /*permissions*/
 import { loginService } from '../login/login.service';
-import { userRole } from 'app/login/user.interface';
+import { userRole, User } from 'app/login/user.interface';
 
 const colors: any = {
   red: {
@@ -102,15 +102,16 @@ export class EventsComponent implements OnInit {
 
   onEdit: boolean = false;
   events: tripEventID[] = [];
-  passengers: Array<Passenger>;// [{id:"0", name:"1" ,destination:"1"}];
+  passengers: Array<User>;// [{id:"0", name:"1" ,destination:"1"}];
+  passengersObs: Observable<User[]>;
   // passengers: any[] = [];
   drivers: driver[] = [];
   selectedPassengersMap: {} = {};
-  selectedPassengers: Array<Passenger> = [];
+  selectedPassengers: Array<User> = [];
   selectedDriversMap: {} = {};
   selectedDrivers: Passenger[] = [];
 
-  passengerToPush: Passenger;
+  passengerToPush: User;
 
   permissions: userRole = {
     Passenger: null,
@@ -125,7 +126,11 @@ export class EventsComponent implements OnInit {
     private afs: AngularFirestore,
     private ls: loginService) {
     this.eventsCollection = afs.collection<tripEvent>('calendarEvent');
-    ls.getUserDetails().subscribe(data => this.permissions = data[0].role);
+    ls.getUserDetails().subscribe(data => this.permissions = data.role);
+    // this.passengersObs = 
+    this.PassengerService.getPassengersFirebase().subscribe(data => { this.passengers = data});
+    
+    // ls.getUserDetails().subscribe(data => this.permissions = data[0].role);
     // this.dataService = completerService.local(this.searchData, 'color', 'color');
   }
 
@@ -135,10 +140,9 @@ export class EventsComponent implements OnInit {
         .filter(event => event.isActive))
       .subscribe(data => {
         this.events = data,
-          console.log("events:" + this.events)
+          console.log("events:" + this.events + "smapleEvent:"+this.events[0].passengers)
       });
-    this.PassengerService.getPassengersFirebase()
-      .subscribe(data => { this.passengers = data, console.log("passengers:" + this.passengers) });
+       
   }
 
   addEvent(): void {
@@ -187,7 +191,7 @@ export class EventsComponent implements OnInit {
   initSelectedList(list): void {
     for (var i = 0; i < list.length; i++) {
       //  this.selectedPassengers = ({[this.passengers[i].name] : true}); 
-      this.selectedPassengersMap[this.passengers[i].id] = false;
+      this.selectedPassengersMap[this.passengers[i].uid] = false;
     }
   }
   updateCheckedOptions(passenger, event) {
@@ -196,6 +200,7 @@ export class EventsComponent implements OnInit {
   updateSelectedPassengers() {
     for (var x in this.selectedPassengersMap) {
       this.passengerToPush = this.passengers.find(passenger => passenger.id == x);
+      console.log(this.passengerToPush);
       if (this.selectedPassengersMap[x]) {
         //.map(y => this.passengerToPush = y);
         if (!this.selectedPassengers.find(passenger => this.passengerToPush.id == passenger.id)){

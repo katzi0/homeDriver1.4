@@ -5,9 +5,10 @@ import { EventsService } from '../events/events.service';
 
 import { AngularFirestore,AngularFirestoreCollection  } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import { User, userRole } from 'app/login/user.interface';
 
 export interface Item { name: string;}
-export interface ItemId extends Item { id: string; }
+export interface UserId extends User { id: string; }
 
 @Component({
   //  moduleId: module.id,
@@ -17,35 +18,19 @@ export interface ItemId extends Item { id: string; }
 })
 
 export class PassengerComponent implements OnInit { 
-    private passenegerCollection:AngularFirestoreCollection<Item>;
-    private loggedInPassenger:AngularFirestoreCollection<Item>;
-    passengers:Passenger[] = [];
-    // passengers:Observable<ItemId[]>;
-    // items:Observable<ItemId[]>;
-    passengerToSave:Passenger = {id:"0", name:"passenger to save", destination:"none",email:"none"};//new Passenger(id:"0", name:"passenger to save", destination:"none");
-    // item:Observable<ItemId[]>;
+    private passenegerCollection:AngularFirestoreCollection<User>;
+    private loggedInPassenger:AngularFirestoreCollection<UserId>;
+    userRole:userRole = {Admin:false, Passenger:true, Driver:false};
+    
+    passengers:User[] = [];
+   
+    passengerToSave:User = {uid:"0", firstName:"passenger to save",lastName:"passenger to save", destination:"none",email:"none",role:this.userRole,password:"pass"};//new Passenger(id:"0", name:"passenger to save", destination:"none");
     currentPassengerLoggedIn: Passenger = {id:"0", name:"passenger to save", destination:"none",email:"none"};//new Passenger("0", "passenger to save","none");
 
-    
-    // passengerToSave: Passenger = new Passenger(null, "passenger to save");
-    // passengerID:number;
-    // currentPassengerLoggedIn: Passenger = new Passenger(null,"test");
-    
     constructor(afs:AngularFirestore,private passengerService:PassengerService, private EventsService:EventsService) {
-    //     this.passenegerCollection = afs.collection<Item>('passengers');
-    //     this.passengers = this.passenegerCollection.snapshotChanges().map(a => {
-    //   return a.map(b => {
-    //     const data = b.payload.doc.data() as Item;
-    //     const id = b.payload.doc.id;
-    //     console.log(data,id);
-    //     return { id,...data};
-    //   })
-    // }) ;
-     }
-   
+    }
 
     ngOnInit() {
-       // this.passengerService.getPassengers().subscribe(data => this.passengers = data);
        this.passengerService.getPassengersFirebase()
        .map(events => events)
        .subscribe(data => {
@@ -55,35 +40,12 @@ export class PassengerComponent implements OnInit {
      }
       savePassenger(){
       console.log("passengerToSave: "+this.passengerToSave);
-      this.passenegerCollection.add({name:this.passengerToSave.name});
+      this.passenegerCollection.add(this.passengerToSave);
     }
     savePassengerFirebase(){
       console.log("passengerToSave: "+this.passengerToSave);
+      this.passengerToSave.role = this.userRole;
       this.passengerService.savePassengerFirebase(this.passengerToSave);
-      // this.passenegerCollection.add({name:this.passengerToSave.name});
     }
-    // getPassenger(){
-    //   this.passenegerCollection.
-    // }
-    //  ngOnChanges(changes:SimpleChanges){
-    //      console.log(changes.passengers);
-    //  }
-    //  savePassenger(){
-    //     this.passengerService.savePassenger(this.passengerToSave)
-    //     .subscribe(data => {
-    //         console.log(data);
-    //         this.passengerToSave = new Passenger(data.key,data.name);
-    //         console.log(this.passengerToSave.name);
-    //         this.passengerService.getPassengers().subscribe(data => this.passengers = data);
-    //         });
-    //  }
-    //     getPassenger(){
-    //         this.passengerService.getSepcificPassenger(this.passengerID).subscribe( data => this.currentPassengerLoggedIn = data);
-    //         console.log("currentPassengerLoggedIn:" + this.currentPassengerLoggedIn);
-    //     }
-    //     getPassengerEvents(){
-    //         this.EventsService.getEventsByPassengerID(this.passengerID).subscribe(data => {console.log(data)});
-    //     }t
-    
 }
 

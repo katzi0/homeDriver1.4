@@ -1,20 +1,22 @@
 <h1>passenger component </h1>
 <ul>
 <li class="text" *ngFor="let passenger of passengers" (click) = "savePassenger(passenger)">
-          {{ passenger.name }}
+          {{ passenger.firstName }}
 
   </li>
 </ul>
 <!-- <div *ngFor="let passenger of passengers">{{passenger.name}}</div>    -->
 <h3>הוספת נוסע חדש</h3>
 
-<label>שם:</label><input type="text" [(ngModel)]="passengerToSave.name">
+<label>שם פרטי:</label><input type="text" [(ngModel)]="passengerToSave.firstName">
+<label>שם משפחה:</label><input type="text" [(ngModel)]="passengerToSave.lastName">
+
 <br>
 <label>יעד:</label>
 <input type="text" [(ngModel)]="passengerToSave.destination">
 <label>מייל:</label>
 <input type="text" [(ngModel)]="passengerToSave.email">
-<h3>{{passengerToSave.name}}</h3>
+<h3>{{passengerToSave.firstName}}</h3>
 <h3>{{passengerToSave.destination}}</h3>
 <h3>{{passengerToSave.email}}</h3>
 <button (click)="savePassengerFirebase()" class="btn btn-primary">save</button>

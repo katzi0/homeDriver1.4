@@ -7,35 +7,28 @@
     <a routerLink="/trips" routerLinkActive="active">trips</a>
     <a routerLink="/login" routerLinkActive="active">login</a>
   </nav> -->
-
-  <nav class="navbar navbar-toggleable-md navbar-light bg-faded" style="direction: RTL">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="#" style="direction: RTL">נהג הבית</a>
-    
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav" style="direction: RTL">
-          <li class="nav-item active">
-            <a class="nav-link" href="#" routerLink="/calendar">לו"ז <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" routerLink="/events">מנהל</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="#" routerLink="/login">התחברות</a>
-            </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li>
-        </ul>
-        <!-- <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form> -->
-      </div>
-    </nav>
-
+    <nav class="navbar navbar-light bg-faded">
+        <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed" aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+          &#9776;
+        </button>
+        <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+          <a class="navbar-brand" href="#">Responsive navbar</a>
+          <ul class="nav navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#" routerLink="/login">התחברות</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" routerLink="/calendar">לו"ז <span class="sr-only">(current)</span></a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" routerLink="/events">מנהל</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#" routerLink="/profile">אזור אישי</a>
+                </li>
+          </ul>
+        </div>
+      </nav>
   <router-outlet></router-outlet>
 <!--<passenger-component></passenger-component>-->
 <!--<trip-component></trip-component>-->

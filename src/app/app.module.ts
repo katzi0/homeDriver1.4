@@ -28,7 +28,7 @@ import { DemoUtilsModule } from './demo-utils/module';
 // import { DemoModule } from './calendar/module';
 
 import { EventsComponent } from './events/events.component';
-
+import { EventsListComponent } from './events/events-list';
 //login
 import { loginComponent } from './login/login.component';
 
@@ -38,11 +38,16 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
 
 /*auth*/
-import { AuthGuard } from './shared/auth-guard.service';
+ import { AuthGuard } from './login/auth-guard.service';
+ import { AuthService } from './login/auth-service';
+import { LoginRoutingModule } from './login/login-routing.module';
 /*auth*/
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { CanActivate, Router } from '@angular/router';
+
+/* user profile */
+import { ProfileComponent } from './profile/profile.component';
 
 /*font awasome*/
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
@@ -53,16 +58,18 @@ const appRoutes: Routes = [
   { path:'drivers', component: DriverComponent, canActivate: [AuthGuard] },
   { path: 'add-event' , component: AddEventComponent, canActivate: [AuthGuard] },
   { path: 'calendar' , component: CalendarDayViewComponent, canActivate: [AuthGuard] },
+  { path: '' , component: CalendarDayViewComponent, canActivate: [AuthGuard] },
   { path: 'events', component: EventsComponent, canActivate: [AuthGuard] },
   { path: 'trips', component: TripComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'login', component: loginComponent },
 
 ]
 
 @NgModule({
   declarations: [
-    AppComponent, PassengerComponent, DriverComponent, TripComponent, TripFormComponent,CalendarDayViewComponent, AddEventComponent,EventsComponent,
-    loginComponent
+    AppComponent, PassengerComponent, DriverComponent, TripComponent, TripFormComponent,
+    CalendarDayViewComponent, AddEventComponent,EventsComponent,EventsListComponent,loginComponent,ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +85,8 @@ const appRoutes: Routes = [
     Ng2CompleterModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    LoginRoutingModule
     // , DemoModule
   ],
   providers: [AuthGuard,AngularFireAuth],

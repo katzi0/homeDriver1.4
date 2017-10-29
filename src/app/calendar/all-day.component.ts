@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import {
   startOfDay,
   endOfDay,
@@ -20,7 +20,6 @@ import {
 } from 'angular-calendar';
 import { tripEvent, tripEventID } from '../calendar/tripEvent.interface';
 import { CustomDateFormatter } from './custom-data-formatter';
-
 
 import { EventsService } from '../events/events.service';
 import { Observable } from 'rxjs/Observable';
@@ -57,7 +56,7 @@ import { User } from 'app/login/user.interface';
 })
 export class CalendarDayViewComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
-
+  @Input () isProfilePage:boolean = false;
   view: string = 'month';
   locale: string = 'he';
   viewDate: Date = new Date();
@@ -101,10 +100,14 @@ export class CalendarDayViewComponent implements OnInit {
     //this.eventsFireBase.subscribe(trips => this.eventsFireBaseFiltered = trips)
     //.map(events => events.filter(event => event.isActive))
     // .subscribe(data=>{this.eventsFireBase = data,console.log("events:"+this.events);});
+    
     this.ls.getUserDetails()
       .subscribe(data => {
-        this.loggenUser = data[0],
-          console.log("loggenUser: " + data[0].email)
+        this.loggenUser = data,
+          console.log("loggenUser: " + data.email)
+          if(this.isProfilePage){
+            this.showUserEvents();
+          }
       })
   }
 
