@@ -1,8 +1,9 @@
 import { LOCALE_ID, Inject } from '@angular/core';
 import { CalendarEventTitleFormatter, CalendarEvent } from 'angular-calendar';
+import { tripEvent } from 'app/calendar/tripEvent.interface';
 
 export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
-  constructor(@Inject(LOCALE_ID) private locale: string) {
+  constructor( @Inject(LOCALE_ID) private locale: string) {
     super();
   }
 
@@ -22,10 +23,28 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
     }).format(event.start)}</b> ${event.title}`;
   }
 
-  day(event: CalendarEvent): string {
-    return `<b>${new Intl.DateTimeFormat(this.locale, {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).format(event.start)}</b><br /> ${event.title}`;
+  // day(event: tripEvent): string {
+  //   return `<b>${new Intl.DateTimeFormat(this.locale, {
+  //     hour: 'numeric',
+  //     minute: 'numeric'
+  //   }).format(event.start)}</b><br /> ${event.title}</br >`;
+  // }
+  day(event: tripEvent): string {
+    if (event.numOfFreeSeats > 0) {
+      return `<b>${new Intl.DateTimeFormat(this.locale, {
+        hour: 'numeric',
+        minute: 'numeric'
+      }).format(event.start)}</b>
+    <br /> ${event.title}
+    <br />נותרו ${event.numOfFreeSeats} מקומות`;
+    }
+    else{
+      return `<b>${new Intl.DateTimeFormat(this.locale, {
+        hour: 'numeric',
+        minute: 'numeric'
+      }).format(event.start)}</b>
+    <br /> ${event.title}
+    <br />הנסיעה מלאה`;
+    }
   }
 }

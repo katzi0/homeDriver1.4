@@ -80,7 +80,7 @@ export class CalendarDayViewComponent implements OnInit {
   }];
 
   refresh: Subject<any> = new Subject();
-
+  event: tripEvent;
   events: tripEventID[] = [];
   eventsFireBaseRaw: Observable<tripEvent[]>;
   eventsFireBaseFiltered: Observable<tripEvent[]>;
@@ -95,7 +95,20 @@ export class CalendarDayViewComponent implements OnInit {
     //                   .map(events => events.filter(event => event.isActive))
     //                   .subscribe(data=>{this.events = data,console.log("events:"+this.events);});
 
-    this.eventsFireBaseRaw = this.eventService.getEventsFireBase().map(events => events)
+    //  this.eventService.getEventsFireBase()
+    // .flatMap(trips=>trips)
+    // .map(trip=>
+    //  {trip.driver.numOfSeats > trip.passengers.length? trip.isFull=false:trip.isFull=true;
+    //   this.events.push(trip);console.log(trip)})
+    this.eventsFireBaseRaw = this.eventService.getEventsFireBase().map(events=>events.filter(event => event.isActive))
+    // this.eventsFireBaseRaw = this.eventService.getEventsFireBase()
+    //                                           .map((events)=> {return events
+    //                                           .forEach(event => {return event})})
+                                              
+                                              //  .flatMap(trips=>trips)
+                                              //  .map(trip=>
+                                              //   {trip.driver.numOfSeats > trip.passengers.length? trip.isFull=false:trip.isFull=true;
+                                              //   return trip})
     this.eventsFireBaseFiltered = this.eventsFireBaseRaw
     //this.eventsFireBase.subscribe(trips => this.eventsFireBaseFiltered = trips)
     //.map(events => events.filter(event => event.isActive))

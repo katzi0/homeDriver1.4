@@ -1,0 +1,13 @@
+/* .footerNav {
+    margin-top:100px;
+} */
+.footryNavbar {
+    justify-content: center;
+}
+
+.footryNavbar label {
+    margin:10px;
+}
+.footryNavbar label a {
+    color:white;
+}

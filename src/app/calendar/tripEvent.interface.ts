@@ -11,8 +11,9 @@ import { User } from 'app/login/user.interface';
 export interface tripEvent extends CalendarEvent  {
     //id:string;
     passengers:User[];
-    driver:driver;
+    driver:User;
     isActive:boolean;
+    numOfFreeSeats?:number;
 }
 
 export interface tripEventID extends tripEvent {

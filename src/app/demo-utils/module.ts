@@ -6,6 +6,7 @@ import { CalendarModule } from 'angular-calendar';
 import { CalendarHeaderComponent } from './calendar-header.component';
 import { DateTimePickerComponent } from './date-time-picker.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdDatepickerI18n } from '../calendar/datepicker-i18n';
 
 @NgModule({
   imports: [
@@ -15,14 +16,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbDatepickerModule.forRoot(),
     NgbTimepickerModule.forRoot(),
     CalendarModule
+    
   ],
   declarations: [
     CalendarHeaderComponent,
-    DateTimePickerComponent
+    DateTimePickerComponent,
+    NgbdDatepickerI18n
   ],
   exports: [
     CalendarHeaderComponent,
-    DateTimePickerComponent
+    DateTimePickerComponent,
+    NgbdDatepickerI18n
   ]
 })
 export class DemoUtilsModule {}

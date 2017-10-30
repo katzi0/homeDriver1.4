@@ -1,4 +1,4 @@
-<div *ngIf="afAuth.authState | async; let user; else showLoginSignUp">
+<!-- <div *ngIf="afAuth.authState | async; let user; else showLoginSignUp">
   <h1>Hello {{ user.displayName }}!</h1>
   <button (click)="logout()">Logout</button>
 </div>
@@ -32,9 +32,9 @@
   <button (click)="signUp()">signUp</button>
 </ng-template>
 <span *ngIf="errorCode">{{errorCode}}</span>
-<span *ngIf="errorMessage">{{errorMessage}}</span>
+<span *ngIf="errorMessage">{{errorMessage}}</span> -->
 <!-- <button (click)="getSignedUserDetails()" type="button">print current user</button> -->
-<button (click)="fillFieldsForTesting()" type="button">fill fields </button>
+<!-- <button (click)="fillFieldsForTesting()" type="button">fill fields </button> -->
 <!-- y -->
 <!-- <button (click)="showSignUp=!showSignUp">signUp</button>
   <div *ngIf="showSignUp">
@@ -75,9 +75,7 @@
     <input type="password" [(ngModel)]="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password"
       required>
     <div class="checkbox">
-      <!-- <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label> -->
+     
     </div>
     <button type="submit" class="btn btn-success" [disabled]="!loginForm.form.valid">התחבר</button>
     <button type="submit" class="btn btn-light" (click)="showLogin=!showLogin">

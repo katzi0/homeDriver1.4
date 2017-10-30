@@ -1,8 +1,8 @@
-<div>
+<!-- <div>
   passenger: {{permissions.Passenger}}
   <br> Driver: {{permissions.Driver}}
   <br> Admin: {{permissions.Admin}}
-</div>
+</div> -->
 <div class="container" *ngIf="permissions.Admin">
   <div class="row">
     <div class="col-md-12">
@@ -14,7 +14,7 @@
       </button>
       <button class="btn btn-default pull-right" (click)="showAllEvents=!showAllEvents">הצג נסיעות</button>
       <div class="clearfix"></div>
-      <table class="table table-bordered" style="direction: RTL">
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th>כיוון</th>
@@ -52,7 +52,7 @@
               </mwl-demo-utils-date-time-picker>
             </td>
             <td>
-              <button class="btn btn-danger" (click)="events.splice(index, 1);deActivateEvent(event)">
+              <button class="btn btn-danger" (click)="events.splice(index, 1);deActivateEvent(event);">
                 <!--; refresh.next()-->
                 Delete
               </button>
@@ -93,6 +93,8 @@
             <mwl-demo-utils-date-time-picker [(date)]="editedCalendarEvent.end" placeholder="Not set">
               <!--(dateChange)="refresh.next()"-->
             </mwl-demo-utils-date-time-picker>
+            <!-- <ngbd-datepicker-i18n placeholder="Not set"></ngbd-datepicker-i18n> -->
+
           </td>
           <td>
             <!--  <button class="btn btn-danger" (click)="events.splice(index, 1)"> ; refresh.next()
@@ -120,19 +122,41 @@
     </div>
 
   </div>
-  <div class="col-md-5">
-    <span>select passengers for trip</span>
-    <ul class="list-group">
-      <li *ngFor="let passenger of passengers" [ngClass]="checkIfPassengerSelected(passenger)" (click)="toggleSelectedPassenger(passenger)">
-        {{passenger.firstName}}
-      </li>
-    </ul>
-    <!-- <div *ngFor="let passenger of passengers;">
-      <input type="checkbox" value="{{passenger}}" [checked]="passengers.indexOf[passenger] >= 0" (change)="updateCheckedOptions(passenger, $event)"
-      />
-      <span>{{passenger.name}}</span>
-    </div> -->
-  </div>
+  <form #f="ngForm" style="direction: RTL">
+    <div class="col-md-5">
+      <label>בחירת נהג</label>
+      <select name="driver" [(ngModel)]="selectedDriver">
+        <option value="" disabled>בחירת נהג</option>
+        <option *ngFor="let driver of drivers" [ngValue]="driver">
+          {{driver.firstName}}
+        </option>
+      </select>
+
+      <div *ngIf="selectedDriver">
+        <label>מספר מושבים ברכב:</label>
+        <!-- <input type="number" [(ngModel)]="selectedDriver.numOfSeats"> -->
+        {{selectedDriver.numOfSeats}}
+        <a href="javascript:;" (click)="selectedDriver.numOfSeats == 5 ? selectedDriver.numOfSeats = 8:selectedDriver.numOfSeats = 5">
+          <span *ngIf="selectedDriver.numOfSeats == 5">החלף לרכב 8 מקומות</span>
+          <span *ngIf="selectedDriver.numOfSeats == 8">החלף לרכב 5 מקומות</span>
+        </a>
+      </div>
+      <!-- {{selectedDriver.firstName}} -->
+    </div>
+    <div class="col-md-5" *ngIf="selectedDriver">
+      <span>בחר נוסעים:</span>
+      <div *ngIf="numOfFreeSeats">
+        <span> נותרו </span>
+        <span>{{numOfFreeSeats}}</span>
+        <span>מקומות</span>
+      </div>
+      <ul class="list-group">
+        <li *ngFor="let passenger of passengers" [ngClass]="checkIfPassengerSelected(passenger)" (click)="toggleSelectedPassenger(passenger)">
+          {{passenger.firstName}}
+        </li>
+      </ul>
+    </div>
+  </form>
   <!-- <button type="button" (click)="updateSelectedPassengers()">שמור נוסעים</button>
   <input type="text" (change)="checkForPassengers()"> -->
 

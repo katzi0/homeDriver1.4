@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { EventsListComponent } from './events-list';
+// import { EventsListComponent } from './events-list';
 import { EventsService } from './events.service';
 import {
   CalendarEvent,
@@ -49,7 +49,12 @@ const colors: any = {
   yellow: {
     primary: '#e3bc08',
     secondary: '#FDF1BA'
+  },
+  green: {
+    primary:'#CCEBE3',
+    secondary:'#F9FDFC'
   }
+
 };
 
 @Component({
@@ -63,9 +68,9 @@ export class EventsComponent implements OnInit {
   //@Input() calendarEvent : CalendarEvent;
   editedCalendarEvent: tripEvent = {
     //  id: null,
-    title: 'New edited event',
-    start: startOfDay(new Date()),
-    end: endOfDay(new Date()),
+    title: 'כיוון הנסיעה',
+    start: startOfDay(new Date(Date.now())),
+    end: endOfDay(new Date(Date.now())),
     color: colors.red,
     draggable: true,
     // passengers:[],
@@ -82,7 +87,7 @@ export class EventsComponent implements OnInit {
   protected searchStr: string;
   protected searchStrDriver: string;
   protected captain: string;
-  driver: string;
+  // driver: string;
   protected dataService: CompleterData;
   // protected searchData = [
   //   { color: 'red', value: '#f00' },
@@ -105,13 +110,16 @@ export class EventsComponent implements OnInit {
   passengers: Array<User>;// [{id:"0", name:"1" ,destination:"1"}];
   passengersObs: Observable<User[]>;
   // passengers: any[] = [];
-  drivers: driver[] = [];
+  selectedDriver:User;
+  drivers: User[] = [];
   selectedPassengersMap: {} = {};
   selectedPassengers: Array<User> = [];
   selectedDriversMap: {} = {};
   selectedDrivers: Passenger[] = [];
 
   passengerToPush: User;
+
+  numOfFreeSeats:number;
 
   permissions: userRole = {
     Passenger: null,
@@ -129,6 +137,7 @@ export class EventsComponent implements OnInit {
     ls.getUserDetails().subscribe(data => this.permissions = data.role);
     // this.passengersObs = 
     this.PassengerService.getPassengersFirebase().subscribe(data => { this.passengers = data});
+    this.PassengerService.getDriversFirebase().subscribe(data => { this.drivers = data});
     
     // ls.getUserDetails().subscribe(data => this.permissions = data[0].role);
     // this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -171,7 +180,10 @@ export class EventsComponent implements OnInit {
     this.eventsService.deleteEvent(tripEvent);
   }
   saveEventFireBase() {
-
+     this.numOfFreeSeats > 0? this.editedCalendarEvent.color = colors.green:this.editedCalendarEvent.color = colors.red;
+   // this.editedCalendarEvent.
+   this.editedCalendarEvent.numOfFreeSeats = this.numOfFreeSeats;
+    this.editedCalendarEvent.driver = this.selectedDriver;
     this.editedCalendarEvent.passengers = this.selectedPassengers;
     //this.editedCalendarEvent.id = this.afs.createId();
     this.eventsCollection.add(this.editedCalendarEvent);
@@ -204,7 +216,13 @@ export class EventsComponent implements OnInit {
       if (this.selectedPassengersMap[x]) {
         //.map(y => this.passengerToPush = y);
         if (!this.selectedPassengers.find(passenger => this.passengerToPush.id == passenger.id)){
-          this.selectedPassengers.push(this.passengerToPush);//this.passengers.filter(passenger => passenger.id == x)
+          if(this.selectedDriver.numOfSeats - this.selectedPassengers.length > 0){
+            this.selectedPassengers.push(this.passengerToPush);//this.passengers.filter(passenger => passenger.id == x)
+            this.numOfFreeSeats = this.selectedDriver.numOfSeats - this.selectedPassengers.length;
+          }
+            else {
+              console.log("no more empty seats");
+            }
         }
       }
       else {
@@ -212,6 +230,7 @@ export class EventsComponent implements OnInit {
 
         if (index > -1) {
           this.selectedPassengers.splice(index, 1);
+          this.numOfFreeSeats = this.selectedDriver.numOfSeats - this.selectedPassengers.length;
         }
       }
     }
@@ -246,21 +265,8 @@ export class EventsComponent implements OnInit {
       'active': this.selectedPassengersMap[passenger.id]
     }
   }
-  // autocomplete select event -  passengers
-  // onSelect(item: CompleterItem){
-  //  if(item) {
-  //   this.editedCalendarEvent.passengers.push(this.passengers.find(x=> x.name == item.title));
-  //   this.selectedPassengers.push(this.passengers.find(x=> x.name == item.title));
-  //   //remove selected passenger from passengers list
-  //   this.passengersList.splice(this.passengersList.indexOf(item.title),1);
-  //   }
-  // }
-  // //autocomplete select event -  driver
-  // onSelectDriver(item: CompleterItem){
-  //  if(item) {
-  //   this.editedCalendarEvent.driver = this.drivers.find(x => x.name == item.title);
-  //     this.selectedDrivers.push(this.drivers.find(x=> x.name == item.title));
-  //   // this.selectedPassengerName = item.title;
-  //   }
-  // }
+  changeDriver(driver:User){
+    // this.selectedDriver = driver;
+    // console.log(this.selectedDriver.firstName + " " + this.selectedDriver.lastName);
+  }
 }

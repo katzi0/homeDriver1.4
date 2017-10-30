@@ -124,7 +124,7 @@ singleEvent: tripEvent = {
    color: colors.red,
    passengers:null,
    driver:null,
-   isActive:true
+   isActive:true,
     // actions: this.actions
   }
 
@@ -135,21 +135,7 @@ constructor(private modal: NgbModal) {}
     this.modal.open(this.modalContent, {size: 'lg'});
   }
       addEvent(): void {
-    this.events.push({
-      id:null,
-      title: 'New event',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.red,
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      passengers:null,
-      driver:null,
-      isActive:true
-    });
+    
     this.refresh.next();
   }
 

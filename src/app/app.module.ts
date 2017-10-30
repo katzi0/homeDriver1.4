@@ -28,7 +28,7 @@ import { DemoUtilsModule } from './demo-utils/module';
 // import { DemoModule } from './calendar/module';
 
 import { EventsComponent } from './events/events.component';
-import { EventsListComponent } from './events/events-list';
+// import { EventsListComponent } from './events/events-list';
 //login
 import { loginComponent } from './login/login.component';
 
@@ -52,6 +52,9 @@ import { ProfileComponent } from './profile/profile.component';
 /*font awasome*/
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
 
+/*footer navbar*/
+// import { FooterNavbarComponent } from './shared/footer-navbar';
+import { FooterNavbarComponent } from './shared/layout/footer-navbar';
 /* calendar*/
 const appRoutes: Routes = [
   { path:'passengers', component: PassengerComponent, canActivate: [AuthGuard] },
@@ -69,7 +72,8 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent, PassengerComponent, DriverComponent, TripComponent, TripFormComponent,
-    CalendarDayViewComponent, AddEventComponent,EventsComponent,EventsListComponent,loginComponent,ProfileComponent
+    CalendarDayViewComponent, AddEventComponent,EventsComponent,loginComponent,ProfileComponent
+    , FooterNavbarComponent
   ],
   imports: [
     BrowserModule,

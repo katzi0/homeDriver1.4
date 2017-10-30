@@ -16,12 +16,25 @@ import { User, userRole } from '../login/user.interface';
 @Injectable()
 export class PassengerService {
     private passengerCollection:AngularFirestoreCollection<User>;
+    private driversollection:AngularFirestoreCollection<User>;
+    
     passengerList:Observable<User[]>;
+    driversList:Observable<User[]>;
     userRole:userRole = {Driver:false, Passenger:true, Admin:false};
    constructor(private http: Http,private afs:AngularFirestore)
    {
     this.passengerCollection = afs.collection<User>('users', ref => ref.where('role.Admin', '==', false).where('role.Driver', '==', false));
+    this.driversollection = afs.collection<User>('users', ref => ref.where('role.Admin', '==', false).where('role.Driver', '==', true).where('role.Passenger', '==', false));
+    
     this.passengerList = this.passengerCollection.snapshotChanges().map(a => {
+        return a.map(b => {
+            const data = b.payload.doc.data() as User;
+            const id = b.payload.doc.id;
+            console.log(data, id);
+            return { id, ...data };
+        })
+    })
+    this.driversList = this.driversollection.snapshotChanges().map(a => {
         return a.map(b => {
             const data = b.payload.doc.data() as User;
             const id = b.payload.doc.id;
@@ -35,6 +48,9 @@ export class PassengerService {
    getPassengersFirebase() {
        return this.passengerList;
    }
+   getDriversFirebase() {
+    return this.driversList;
+}
    savePassengerFirebase(passengerToSave:User) {
         let uuid = UUID.UUID();
         this.passengerCollection.add({uid:uuid,firstName:passengerToSave.firstName,lastName:passengerToSave.lastName,destination:passengerToSave.destination,email:passengerToSave.email,password:passengerToSave.password,role:passengerToSave.role});

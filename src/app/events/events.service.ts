@@ -52,7 +52,7 @@ export class EventsService {
     deleteEvent(calendarEvent:tripEventID){
        // this.$itemToDeleteID = calendarEvent.id;
          this.itemToRemoveDoc = this.afs.doc<tripEventID>('calenderEvent/' + calendarEvent.id);
-        // this.itemToRemove = this.itemToRemoveDoc.valueChanges();
+        this.itemToRemove = this.itemToRemoveDoc.valueChanges();
         console.log("itemToRemove:"+this.itemToRemove);
         this.itemToRemoveDoc.delete();
     }

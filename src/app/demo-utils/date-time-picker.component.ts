@@ -24,6 +24,9 @@ import {
   NgbDateStruct,
   NgbTimeStruct
 } from '@ng-bootstrap/ng-bootstrap';
+//import {NgbDatepickerI18n} from '@ng-bootstrap/ng-bootstrap';
+//  import { CustomDatepickerI18n } from '../calendar/datepicker-i18n';
+
 
 @Component({
   selector: 'mwl-demo-utils-date-time-picker',

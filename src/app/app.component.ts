@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AngularFirestore,AngularFirestoreDocument,AngularFirestoreCollection  } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
+
 export interface Item { name: string;}
 export interface ItemId extends Item { id: string; }
 
