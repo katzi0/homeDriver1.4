@@ -18,6 +18,7 @@ import {
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 import { tripEvent, tripEventID } from '../calendar/tripEvent.interface';
+import { DateControlComponent } from './date-control.component';
 
 const colors: any = {
   red: {

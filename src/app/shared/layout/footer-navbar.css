@@ -5,9 +5,24 @@
     justify-content: center;
 }
 
-.footryNavbar label {
-    margin:10px;
+.footryNavbar div {
+    width: 84px;
+    height: 35px;
+    margin: 10px;
+    background-color: white;
+    border: 1px solid #4d4b4b;
+    border-radius: 50px;
+    text-align: center;
 }
-.footryNavbar label a {
-    color:white;
+.footryNavbar div:hover {
+    background-color:#adadb3;
+}
+.footryNavbar div a {
+    display: inline-block;
+    color:rgb(71, 69, 69);
+    width:100%;
+    line-height:30px;
+}
+.footryNavbar div a:hover, .footryNavbar div a:after, .footryNavbar div a:active{
+    text-decoration-line: none;
 }

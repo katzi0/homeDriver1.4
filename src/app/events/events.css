@@ -1,0 +1,11 @@
+.eventsTable{
+    direction: RTL;
+}
+
+.eventsTable th {
+    text-align:right;
+}
+
+.addDriveForm {
+    direction:rtl;
+}

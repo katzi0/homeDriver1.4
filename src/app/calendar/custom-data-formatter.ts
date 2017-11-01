@@ -7,6 +7,6 @@ export class CustomDateFormatter extends CalendarDateFormatter {
       year: 'numeric'
     }).format(date);
     const weekNumber: number = getISOWeek(date);
-    return `Semaine ${weekNumber} en ${year}`;
+    return `שבוע ${weekNumber} שנה ${year}`;
   }
 }

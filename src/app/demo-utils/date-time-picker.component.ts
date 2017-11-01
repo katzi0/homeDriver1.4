@@ -27,11 +27,11 @@ import {
 //import {NgbDatepickerI18n} from '@ng-bootstrap/ng-bootstrap';
 //  import { CustomDatepickerI18n } from '../calendar/datepicker-i18n';
 
-
 @Component({
   selector: 'mwl-demo-utils-date-time-picker',
   template: `
-    <form class="form-inline">
+    <form class="form-inline pickDateInpt" *ngIf="isEndDate==0">
+    <!-- -->
       <div class="form-group">
         <div class="input-group">
           <input
@@ -49,20 +49,33 @@ import {
         </div>
       </div>
     </form>
-    <ngb-timepicker [(ngModel)]="timeStruct" (ngModelChange)="updateTime()" [meridian]="false"></ngb-timepicker>
+    <div class="pickTimeDiv">
+    <span *ngIf="isEndDate==0">:משעה</span>
+    <span *ngIf="isEndDate==1">:עד שעה</span>
+  <ngb-timepicker-steps [(timeStruct)]="timeStruct" (timeStructChange)="updateTime($event)"></ngb-timepicker-steps>
+</div>
+  <!--   <ngb-timepicker [(ngModel)]="timeStruct"  (ngModelChange)="updateTime()" [meridian]="false"></ngb-timepicker>-->
+<!--<ngb-timepicker-steps (updateTime)="updateTime($event)"></ngb-timepicker-steps>-->
   `,
   styles: [`
     .form-group {
       width: 100%;
     }
+    .pickDateInpt {
+      display: block;
+    }
+    .pickTimeDiv {
+      float:right;
+      margin:10px;
+    }
   `]
+  
 })
 export class DateTimePickerComponent implements OnChanges {
-
+  @Input() isEndDate:string;
   @Input() placeholder: string;
-
+ 
   @Input() date: Date;
-
   @Output() dateChange: EventEmitter<Date> = new EventEmitter();
 
   dateStruct: NgbDateStruct;
@@ -89,9 +102,12 @@ export class DateTimePickerComponent implements OnChanges {
     this.dateChange.next(newDate);
   }
 
-  updateTime(): void {
-    const newDate: Date = setHours(setMinutes(setSeconds(this.date, this.timeStruct.second), this.timeStruct.minute), this.timeStruct.hour);
+  //  updateTime(item): void {
+  updateTime(item): void {
+   const newDate: Date = setHours(setMinutes(setSeconds(this.date, this.timeStruct.second), this.timeStruct.minute), this.timeStruct.hour);
+  //  const newDate: Date = setHours(setMinutes(setSeconds(this.date, item.second), item.minute), item.hour);
     this.dateChange.next(newDate);
   }
+
 
 }

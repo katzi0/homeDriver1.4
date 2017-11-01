@@ -61,6 +61,7 @@ const colors: any = {
   // moduleId: module.id,
   selector: 'events',
   templateUrl: 'events.component.html',
+  styleUrls: ['./events.css'],
   providers: [EventsService, PassengerService, driverService, loginService]
 })
 
@@ -89,15 +90,7 @@ export class EventsComponent implements OnInit {
   protected captain: string;
   // driver: string;
   protected dataService: CompleterData;
-  // protected searchData = [
-  //   { color: 'red', value: '#f00' },
-  //   { color: 'green', value: '#0f0' },
-  //   { color: 'blue', value: '#00f' },
-  //   { color: 'cyan', value: '#0ff' },
-  //   { color: 'magenta', value: '#f0f' },
-  //   { color: 'yellow', value: '#ff0' },
-  //   { color: 'black', value: '#000' }
-  // ];
+ 
 
   protected passengersList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
   protected driversList = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
@@ -135,12 +128,10 @@ export class EventsComponent implements OnInit {
     private ls: loginService) {
     this.eventsCollection = afs.collection<tripEvent>('calendarEvent');
     ls.getUserDetails().subscribe(data => this.permissions = data.role);
-    // this.passengersObs = 
+
     this.PassengerService.getPassengersFirebase().subscribe(data => { this.passengers = data});
     this.PassengerService.getDriversFirebase().subscribe(data => { this.drivers = data});
     
-    // ls.getUserDetails().subscribe(data => this.permissions = data[0].role);
-    // this.dataService = completerService.local(this.searchData, 'color', 'color');
   }
 
   ngOnInit() {
@@ -154,33 +145,11 @@ export class EventsComponent implements OnInit {
        
   }
 
-  addEvent(): void {
-    this.events.push({
-      id: null,
-      title: 'New event',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: {
-        // key: null,
-        primary: '#ad2121',
-        secondary: '#FAE3E3'
-      },
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      passengers: null,
-      driver: null,
-      isActive: true
-    });
-
-  }
   deleteEvent(tripEvent: tripEventID) {
     this.eventsService.deleteEvent(tripEvent);
   }
   saveEventFireBase() {
-     this.numOfFreeSeats > 0? this.editedCalendarEvent.color = colors.green:this.editedCalendarEvent.color = colors.red;
+    this.numOfFreeSeats > 0? this.editedCalendarEvent.color = colors.green:this.editedCalendarEvent.color = colors.red;
    // this.editedCalendarEvent.
    this.editedCalendarEvent.numOfFreeSeats = this.numOfFreeSeats;
     this.editedCalendarEvent.driver = this.selectedDriver;
@@ -192,17 +161,11 @@ export class EventsComponent implements OnInit {
     this.eventsService.updateEvent(tripEvent);
   }
   deActivateEvent(tripEvent: tripEventID) {
-    // this.eventsService.deleteEvent(tripEvent);
     this.eventsService.deActivateEvent(tripEvent);
   }
-  // saveEvent(): void {
-  //   this.eventsService.saveEvents(this.editedCalendarEvent).subscribe(data => {
-  //     this.events.push(data), console.log(data)
-  //   });
-  // }
+ 
   initSelectedList(list): void {
     for (var i = 0; i < list.length; i++) {
-      //  this.selectedPassengers = ({[this.passengers[i].name] : true}); 
       this.selectedPassengersMap[this.passengers[i].uid] = false;
     }
   }

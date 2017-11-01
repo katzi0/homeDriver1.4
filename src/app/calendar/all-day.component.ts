@@ -27,6 +27,7 @@ import { Observable } from 'rxjs/Observable';
 import { CustomEventTitleFormatter } from 'app/calendar/CustomEventTitleFormatter';
 import { loginService } from '../login/login.service';
 import { User } from 'app/login/user.interface';
+import { DateControlComponent } from './date-control.component';
 
 @Component({
   selector: 'all-day',
@@ -57,7 +58,7 @@ import { User } from 'app/login/user.interface';
 export class CalendarDayViewComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   @Input () isProfilePage:boolean = false;
-  view: string = 'month';
+  view: string = 'day';
   locale: string = 'he';
   viewDate: Date = new Date();
 
@@ -91,29 +92,11 @@ export class CalendarDayViewComponent implements OnInit {
   constructor(private modal: NgbModal, private eventService: EventsService, private ls: loginService) { }
 
   ngOnInit() {
-    //  this.eventService.getEventsFireBase()
-    //                   .map(events => events.filter(event => event.isActive))
-    //                   .subscribe(data=>{this.events = data,console.log("events:"+this.events);});
-
-    //  this.eventService.getEventsFireBase()
-    // .flatMap(trips=>trips)
-    // .map(trip=>
-    //  {trip.driver.numOfSeats > trip.passengers.length? trip.isFull=false:trip.isFull=true;
-    //   this.events.push(trip);console.log(trip)})
-    this.eventsFireBaseRaw = this.eventService.getEventsFireBase().map(events=>events.filter(event => event.isActive))
-    // this.eventsFireBaseRaw = this.eventService.getEventsFireBase()
-    //                                           .map((events)=> {return events
-    //                                           .forEach(event => {return event})})
-                                              
-                                              //  .flatMap(trips=>trips)
-                                              //  .map(trip=>
-                                              //   {trip.driver.numOfSeats > trip.passengers.length? trip.isFull=false:trip.isFull=true;
-                                              //   return trip})
-    this.eventsFireBaseFiltered = this.eventsFireBaseRaw
-    //this.eventsFireBase.subscribe(trips => this.eventsFireBaseFiltered = trips)
-    //.map(events => events.filter(event => event.isActive))
-    // .subscribe(data=>{this.eventsFireBase = data,console.log("events:"+this.events);});
     
+    this.eventsFireBaseRaw = this.eventService.getEventsFireBase().map(events=>events.filter(event => event.isActive))
+    
+    this.eventsFireBaseFiltered = this.eventsFireBaseRaw
+  
     this.ls.getUserDetails()
       .subscribe(data => {
         this.loggenUser = data,
@@ -157,24 +140,7 @@ export class CalendarDayViewComponent implements OnInit {
     });
   }
 
-  // addEvent(): void {
-  //   this.events.push({
-  //     id:null,
-  //     title: 'New event',
-  //     start: startOfDay(new Date()),
-  //     end: endOfDay(new Date()),
-  //     color: colors.red,
-  //     draggable: true,
-  //     resizable: {
-  //       beforeStart: true,
-  //       afterEnd: true
-  //     },
-  //     passengers:null,
-  //     driver:null,
-  //     isActive:true
-  //   });
-  //   this.refresh.next();
-  // }
+  
   showUserEvents() {
     this.eventsFireBaseFiltered = this.eventsFireBaseRaw
                                             .map(events => events

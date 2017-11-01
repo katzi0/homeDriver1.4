@@ -5,19 +5,20 @@ import { Component, OnInit } from '@angular/core';
     template:  `
     <nav class="navbar fixed-bottom navbar-light bg-faded footerNav">
     <div class="btn-group footryNavbar" data-toggle="buttons">
-        <label class="btn btn-primary">
+        <div>
           <a href="" routerLink="/login">התחברות</a>
-        </label>
-        <label class="btn btn-primary">
+        </div>
+        <div>
           <a href="" routerLink="/events">מנהל</a>
-        </label>
-        <label class="btn btn-primary">
+        </div>
+        <div>
           <a href="" routerLink="/profile">אזור אישי</a>
-        </label>
-        <label class="btn btn-primary">
+        </div>
+        <div>
+        
           <a href="" routerLink="/calendar">לו"ז</a>
-        </label>
-      </div>  
+        </div>
+    </div>  
   </nav>
     `,
     styleUrls: ['./footer-navbar.css']

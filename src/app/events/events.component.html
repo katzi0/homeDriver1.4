@@ -6,7 +6,7 @@
 <div class="container" *ngIf="permissions.Admin">
   <div class="row">
     <div class="col-md-12">
-      <h3>
+      <h3 style="direction: RTL">
         ניהול ועריכת נסיעות
       </h3>
       <button class="btn btn-primary pull-right" (click)="addEvent()">
@@ -14,16 +14,17 @@
       </button>
       <button class="btn btn-default pull-right" (click)="showAllEvents=!showAllEvents">הצג נסיעות</button>
       <div class="clearfix"></div>
-      <table class="table table-bordered">
+      <table class="table table-bordered eventsTable" style="direction: RTL">
         <thead>
-          <tr>
+          <tr style="direction: RTL">
             <th>כיוון</th>
-            <th>צבע</th>
-            <th>צבע משני</th>
-            <th>התחלה</th>
-            <th>סוף</th>
-            <th>הסרה</th>
+            <!-- <th>צבע</th>
+            <th>צבע משני</th> -->
+            <th>מועד</th>
+            <!-- <th>סוף</th> -->
+
             <th>נוסעים</th>
+            <th>הסרה</th>
           </tr>
         </thead>
 
@@ -33,34 +34,30 @@
               <input type="text" class="form-control" [(ngModel)]="event.title">
               <!--(keyup)="refresh.next()"-->
             </td>
-            <td>
+            <!-- <td>
               <input type="color" [(ngModel)]="event.color.primary">
-              <!--(change)="refresh.next()"-->
             </td>
             <td>
               <input type="color" [(ngModel)]="event.color.secondary">
-              <!--(change)="refresh.next()"-->
-            </td>
-            <td>
-              <mwl-demo-utils-date-time-picker [(date)]="event.start" placeholder="Not set">
+            </td> -->
+            <td style="direction: LTR">
+              <mwl-demo-utils-date-time-picker [(date)]="event.start" placeholder="Not set" isEndDate="0">
                 <!--(dateChange)="refresh.next()"-->
               </mwl-demo-utils-date-time-picker>
-            </td>
-            <td>
-              <mwl-demo-utils-date-time-picker [(date)]="event.end" placeholder="Not set">
+              <mwl-demo-utils-date-time-picker [(date)]="event.end" placeholder="Not set" isEndDate="1">
                 <!--(dateChange)="refresh.next()"-->
               </mwl-demo-utils-date-time-picker>
             </td>
             <td>
               <button class="btn btn-danger" (click)="events.splice(index, 1);deActivateEvent(event);">
                 <!--; refresh.next()-->
-                Delete
+                מחיקה
               </button>
               <br>
               <br>
               <br>
               <button class="btn btn-primary pull-right" (click)="updateEventFireBase(event)">
-                update event
+                עדכון
               </button>
             </td>
             <td>
@@ -77,41 +74,36 @@
             <input type="text" class="form-control" [(ngModel)]="editedCalendarEvent.title">
             <!--(keyup)="refresh.next()"-->
           </td>
-          <td>
+          <!-- <td>
             <input type="color" [(ngModel)]="editedCalendarEvent.color.primary">
-            <!--(change)="refresh.next()"-->
           </td>
           <td>
             <input type="color" [(ngModel)]="editedCalendarEvent.color.secondary">
-          </td>
-          <td>
-            <mwl-demo-utils-date-time-picker [(date)]="editedCalendarEvent.start" placeholder="Not set">
+          </td> -->
+          <td style="direction: LTR">
+            <mwl-demo-utils-date-time-picker [(date)]="editedCalendarEvent.start" placeholder="Not set" isEndDate="0">
+              <!--(dateChange)="refresh.next()"-->
+            </mwl-demo-utils-date-time-picker>
+            <mwl-demo-utils-date-time-picker [(date)]="editedCalendarEvent.end" placeholder="Not set" isEndDate="1">
               <!--(dateChange)="refresh.next()"-->
             </mwl-demo-utils-date-time-picker>
           </td>
-          <td>
-            <mwl-demo-utils-date-time-picker [(date)]="editedCalendarEvent.end" placeholder="Not set">
-              <!--(dateChange)="refresh.next()"-->
+          <!-- <td>
+            <mwl-demo-utils-date-time-picker [(date)]="editedCalendarEvent.end" placeholder="Not set" isEndDate="1">
             </mwl-demo-utils-date-time-picker>
-            <!-- <ngbd-datepicker-i18n placeholder="Not set"></ngbd-datepicker-i18n> -->
 
+          </td> -->
+
+          <td>
+            <div *ngFor="let selectedPassenger of selectedPassengers;">
+                <i class="fa fa-user" aria-hidden="true"></i> {{selectedPassenger.firstName}}
+            </div>
           </td>
           <td>
-            <!--  <button class="btn btn-danger" (click)="events.splice(index, 1)"> ; refresh.next()
-              Delete
-            </button>-->
-            <br>
-            <br>
-            <br>
-            <button class="btn btn-primary pull-right" (click)="saveEventFireBase()">
-              <!--saveEvent()-->
-              save event
+            <button class="btn btn-secondary pull-right" (click)="saveEventFireBase()">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              שמירה
             </button>
-          </td>
-          <td>
-            <span *ngFor="let selectedPassenger of selectedPassengers;">
-              {{selectedPassenger.firstName}}
-            </span>
           </td>
         </tr>
         </tbody>
@@ -122,41 +114,83 @@
     </div>
 
   </div>
-  <form #f="ngForm" style="direction: RTL">
-    <div class="col-md-5">
-      <label>בחירת נהג</label>
-      <select name="driver" [(ngModel)]="selectedDriver">
-        <option value="" disabled>בחירת נהג</option>
+  <form class="addDriveForm" #f="ngForm">
+    <div class="form-inline">
+      <label class="mr-sm-2" for="inlineFormDirection">כיוון</label>
+      <input type="text" name="inlineFormDirection" id="inlineFormDirection" class="form-control mb-2 mr-sm-2 mb-sm-0" [(ngModel)]="editedCalendarEvent.title">
+
+      <label class="mr-sm-2" for="inlineFormSelectedDriver">בחירת נהג</label>
+      <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="driver" id="inlineFormSelectedDriver" [(ngModel)]="selectedDriver">
         <option *ngFor="let driver of drivers" [ngValue]="driver">
           {{driver.firstName}}
         </option>
       </select>
+      <label class="mr-sm-5" for="formInlineNumOfSeats" *ngIf="selectedDriver">מספר מושבים ברכב: {{selectedDriver.numOfSeats}}</label>
 
-      <div *ngIf="selectedDriver">
-        <label>מספר מושבים ברכב:</label>
-        <!-- <input type="number" [(ngModel)]="selectedDriver.numOfSeats"> -->
-        {{selectedDriver.numOfSeats}}
+      <span *ngIf="selectedDriver">
         <a href="javascript:;" (click)="selectedDriver.numOfSeats == 5 ? selectedDriver.numOfSeats = 8:selectedDriver.numOfSeats = 5">
-          <span *ngIf="selectedDriver.numOfSeats == 5">החלף לרכב 8 מקומות</span>
-          <span *ngIf="selectedDriver.numOfSeats == 8">החלף לרכב 5 מקומות</span>
+          <span *ngIf="selectedDriver.numOfSeats == 5"> החלף לרכב 8 מקומות</span>
+          <span *ngIf="selectedDriver.numOfSeats == 8"> החלף לרכב 5 מקומות</span>
         </a>
-      </div>
-      <!-- {{selectedDriver.firstName}} -->
+      </span>
     </div>
-    <div class="col-md-5" *ngIf="selectedDriver">
-      <span>בחר נוסעים:</span>
-      <div *ngIf="numOfFreeSeats">
-        <span> נותרו </span>
-        <span>{{numOfFreeSeats}}</span>
-        <span>מקומות</span>
+    <br><br>
+    <div class="form-group">
+      
+      <label class="mr-sm-2" *ngIf="selectedDriver">בחר נוסעים:</label>
+      <label class="mr-sm-4" *ngIf="numOfFreeSeats">
+          <span> נותרו </span>
+          <span>{{numOfFreeSeats}}</span>
+          <span>מקומות</span>
+      </label>
+      <div class="row">
+        <div class="col-md-2">
+      <ul class="list-group" *ngIf="selectedDriver">
+          <li *ngFor="let passenger of passengers" [ngClass]="checkIfPassengerSelected(passenger)" (click)="toggleSelectedPassenger(passenger)">
+            {{passenger.firstName}}
+          </li>
+        </ul>
       </div>
-      <ul class="list-group">
-        <li *ngFor="let passenger of passengers" [ngClass]="checkIfPassengerSelected(passenger)" (click)="toggleSelectedPassenger(passenger)">
-          {{passenger.firstName}}
-        </li>
-      </ul>
+    </div>
+        <!-- <div class="form-check" *ngFor="let passenger of passengers">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" value="">
+              {{passenger.firstName}}
+            </label>
+          </div>
+       -->
     </div>
   </form>
+  <!-- <form #f="ngForm" style="direction: RTL" class="form-inline">
+    <div class="col-md-12">
+
+      <label class="mr-sm-2" for="inlineFormDirection">כיוון</label>
+      <input type="text" name="inlineFormDirection" id="inlineFormDirection" class="form-control mb-2 mr-sm-2 mb-sm-0" [(ngModel)]="editedCalendarEvent.title">
+
+
+
+
+
+      <div class="col-md-5" *ngIf="selectedDriver">
+        <span *ngIf="selectedDriver">בחר נוסעים:</span>
+        <div *ngIf="numOfFreeSeats">
+          <span> נותרו </span>
+          <span>{{numOfFreeSeats}}</span>
+          <span>מקומות</span>
+        </div>
+        <ul class="list-group">
+          <li *ngFor="let passenger of passengers" [ngClass]="checkIfPassengerSelected(passenger)" (click)="toggleSelectedPassenger(passenger)">
+            {{passenger.firstName}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </form> -->
+  <div class="row">
+    <div class="col-md-10">
+      <div class="margin60px" style="margin-top: 60px;height:60px;"></div>
+    </div>
+  </div>
   <!-- <button type="button" (click)="updateSelectedPassengers()">שמור נוסעים</button>
   <input type="text" (change)="checkForPassengers()"> -->
 
