@@ -12,14 +12,16 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
   month(event: CalendarEvent): string {
     return `<b>${new Intl.DateTimeFormat(this.locale, {
       hour: 'numeric',
-      minute: 'numeric'
+      minute: 'numeric',
+      hour12: false
     }).format(event.start)}</b> ${event.title}`;
   }
 
   week(event: CalendarEvent): string {
     return `<b>${new Intl.DateTimeFormat(this.locale, {
       hour: 'numeric',
-      minute: 'numeric'
+      minute: 'numeric',
+      hour12: false
     }).format(event.start)}</b> ${event.title}`;
   }
 
@@ -31,19 +33,20 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
   // }
   day(event: tripEvent): string {
     if (event.numOfFreeSeats > 0) {
-      return `<b>${new Intl.DateTimeFormat(this.locale, {
-        hour: 'numeric',
-        minute: 'numeric'
-      }).format(event.start)}</b>
-    <br /> ${event.title}
+      return `<span>  <b>${new Intl.DateTimeFormat(this.locale, {
+        hour: 'numeric', minute: 'numeric',
+        hour12: false,
+      }).format(event.start)}</b></span> <span>${event.title}</span>
+     
     <br />נותרו ${event.numOfFreeSeats} מקומות`;
     }
     else{
-      return `<b>${new Intl.DateTimeFormat(this.locale, {
+      return `${event.title}<b>${new Intl.DateTimeFormat(this.locale, {
         hour: 'numeric',
-        minute: 'numeric'
+        minute: 'numeric',
+        hour12: false
       }).format(event.start)}</b>
-    <br /> ${event.title}
+    
     <br />הנסיעה מלאה`;
     }
   }

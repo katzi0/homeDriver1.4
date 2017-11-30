@@ -27,7 +27,6 @@ import { Observable } from 'rxjs/Observable';
 import { CustomEventTitleFormatter } from 'app/calendar/CustomEventTitleFormatter';
 import { loginService } from '../login/login.service';
 import { User } from 'app/login/user.interface';
-import { DateControlComponent } from './date-control.component';
 
 @Component({
   selector: 'all-day',

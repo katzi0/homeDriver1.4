@@ -36,6 +36,7 @@ import { driver } from '../driver/driver';
 /*permissions*/
 import { loginService } from '../login/login.service';
 import { userRole, User } from 'app/login/user.interface';
+import { DESTINATOINS } from 'app/events/destinations';
 
 const colors: any = {
   red: {
@@ -72,6 +73,7 @@ export class EventsComponent implements OnInit {
     title: 'כיוון הנסיעה',
     start: startOfDay(new Date(Date.now())),
     end: endOfDay(new Date(Date.now())),
+    //end: endOfDay(new Date(Date.now())),
     color: colors.red,
     draggable: true,
     // passengers:[],
@@ -84,6 +86,9 @@ export class EventsComponent implements OnInit {
     driver: null,
     isActive: true
   }
+
+  destinations:string[] = DESTINATOINS;
+
   /*autocomplete */
   protected searchStr: string;
   protected searchStrDriver: string;
@@ -149,6 +154,11 @@ export class EventsComponent implements OnInit {
     this.eventsService.deleteEvent(tripEvent);
   }
   saveEventFireBase() {
+
+    if(this.editedCalendarEvent.start.getDate() !== this.editedCalendarEvent.end.getDate()){
+      this.editedCalendarEvent.end.setDate(this.editedCalendarEvent.start.getDate());
+    }
+
     this.numOfFreeSeats > 0? this.editedCalendarEvent.color = colors.green:this.editedCalendarEvent.color = colors.red;
    // this.editedCalendarEvent.
    this.editedCalendarEvent.numOfFreeSeats = this.numOfFreeSeats;
@@ -156,6 +166,25 @@ export class EventsComponent implements OnInit {
     this.editedCalendarEvent.passengers = this.selectedPassengers;
     //this.editedCalendarEvent.id = this.afs.createId();
     this.eventsCollection.add(this.editedCalendarEvent);
+    this.editedCalendarEvent = {
+      //  id: null,
+      title: 'כיוון הנסיעה',
+      start: startOfDay(new Date(Date.now())),
+      end: endOfDay(new Date(Date.now())),
+      //end: endOfDay(new Date(Date.now())),
+      color: colors.red,
+      draggable: true,
+      // passengers:[],
+      // driver: null,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      passengers: null,
+      driver: null,
+      isActive: true
+    }
+    this.selectedPassengers = [];
   }
   updateEventFireBase(tripEvent: tripEventID) {
     this.eventsService.updateEvent(tripEvent);
@@ -232,4 +261,8 @@ export class EventsComponent implements OnInit {
     // this.selectedDriver = driver;
     // console.log(this.selectedDriver.firstName + " " + this.selectedDriver.lastName);
   }
+
+  // updateEndDate(){
+  //   this.editedCalendarEvent.end.setMinutes(this.editedCalendarEvent.start.getMinutes()+30);
+  // }
 }

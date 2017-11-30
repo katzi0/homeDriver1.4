@@ -89,7 +89,7 @@
             (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
           </mwl-calendar-week-view>
           <mwl-calendar-day-view *ngSwitchCase="'day'" [locale]="locale" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-            (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)" [dayStartHour]="5"
+            (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)" [dayStartHour]="5" [hourSegments]="3"
             [dayEndHour]="20">>
           </mwl-calendar-day-view>
           <!-- <mwl-calendar-day-view *ngSwitchCase="'day'" [locale]="locale" [viewDate]="viewDate" [events]="events" [refresh]="refresh"

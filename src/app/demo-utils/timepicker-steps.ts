@@ -35,7 +35,7 @@ export class NgbdTimepickerSteps extends NgbTimepicker{
   
   @Input() timeStruct;
   hourStep = 1;
-  minuteStep = 15;
+  minuteStep = 5;
   // test:any;
   // updateTime(){
   //   console.log(this.time);

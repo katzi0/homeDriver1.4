@@ -58,7 +58,6 @@ import { FooterNavbarComponent } from './shared/layout/footer-navbar';
 /*header,logo*/
 import { HeaderComponent } from './shared/layout/header';
 
-import { DateControlComponent } from './calendar/date-control.component';
 
 /* calendar*/
 const appRoutes: Routes = [
@@ -78,7 +77,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent, PassengerComponent, DriverComponent, TripComponent, TripFormComponent,
     CalendarDayViewComponent, AddEventComponent,EventsComponent,loginComponent,ProfileComponent
-    , FooterNavbarComponent,HeaderComponent,DateControlComponent
+    , FooterNavbarComponent,HeaderComponent
   ],
   imports: [
     BrowserModule,

@@ -30,10 +30,10 @@ import {
 @Component({
   selector: 'mwl-demo-utils-date-time-picker',
   template: `
-    <form class="form-inline pickDateInpt" *ngIf="isEndDate==0">
-    <!-- -->
+  
+    <form class="form-inline pickDateInpt" *ngIf="isEndDate=='0'">
       <div class="form-group">
-        <div class="input-group">
+        <div class="input-group directionRtl">
           <input
             readonly
             class="form-control"
@@ -49,11 +49,17 @@ import {
         </div>
       </div>
     </form>
-    <div class="pickTimeDiv">
-    <span *ngIf="isEndDate==0">:משעה</span>
-    <span *ngIf="isEndDate==1">:עד שעה</span>
+    <div class="pickTimeDiv form-inline">
+    <label *ngIf="isEndDate=='0'" class="mr-sm-2" for="inlineFormCustomSelect">משעה</label>
+    <label *ngIf="isEndDate=='1'" class="mr-sm-2" for="inlineFormCustomSelect">עד שעה</label>
+    <div *ngIf="isEndDate=='1'">
+    <!--{{endTimeModified}}
+    <input type="radio" value="beef" name="food" [(ngModel)]="myFood"> נסיעה קצרה
+    <input type="radio" value="beef" name="food" [(ngModel)]="myFood"> נסיעה ארוכה-->
+  </div>
+    
   <ngb-timepicker-steps [(timeStruct)]="timeStruct" (timeStructChange)="updateTime($event)"></ngb-timepicker-steps>
-</div>
+  </div>
   <!--   <ngb-timepicker [(ngModel)]="timeStruct"  (ngModelChange)="updateTime()" [meridian]="false"></ngb-timepicker>-->
 <!--<ngb-timepicker-steps (updateTime)="updateTime($event)"></ngb-timepicker-steps>-->
   `,
@@ -63,10 +69,18 @@ import {
     }
     .pickDateInpt {
       display: block;
+      direction:rtl;
+    }
+    .directionRtl {
+      direction:ltr;
     }
     .pickTimeDiv {
       float:right;
       margin:10px;
+      direction:rtl;
+    }
+    .pickTimeDiv label {
+      margin-left:10px;
     }
   `]
   
@@ -76,6 +90,7 @@ export class DateTimePickerComponent implements OnChanges {
   @Input() placeholder: string;
  
   @Input() date: Date;
+  @Input() endTimeModified: Date;
   @Output() dateChange: EventEmitter<Date> = new EventEmitter();
 
   dateStruct: NgbDateStruct;
@@ -95,6 +110,22 @@ export class DateTimePickerComponent implements OnChanges {
         hour: getHours(this.date)
       };
     }
+    else if(changes['endTimeModified']) {
+      this.dateStruct = {
+        day: getDate(this.endTimeModified),
+        month: getMonth(this.endTimeModified) + 1,
+        year: getYear(this.endTimeModified)
+      };
+      this.timeStruct = {
+        second: getSeconds(this.endTimeModified),
+        minute: getMinutes(this.endTimeModified),
+        hour: getHours(this.endTimeModified)
+      };
+    }
+  }
+
+  onChange(){
+    
   }
 
   updateDate(): void {
